@@ -1,0 +1,1780 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.0
+-- Dumped by pg_dump version 14.0
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+ALTER TABLE ONLY public.web_page_signature DROP CONSTRAINT web_page_signature_user_id_90813285_fk_about_use;
+ALTER TABLE ONLY public.web_page_email DROP CONSTRAINT web_page_email_signature_id_07cedf72_fk_web_page_signature_id;
+ALTER TABLE ONLY public.web_page_email DROP CONSTRAINT web_page_email_sender_id_c0a0b598_fk_about_user_userprofile_id;
+ALTER TABLE ONLY public.web_page_email_receiver DROP CONSTRAINT web_page_email_receiver_email_id_68466bd4_fk_web_page_email_id;
+ALTER TABLE ONLY public.web_page_email_receiver DROP CONSTRAINT web_page_email_recei_contact_id_5cfc704d_fk_web_page_;
+ALTER TABLE ONLY public.web_page_email_label DROP CONSTRAINT web_page_email_label_label_id_30e8206a_fk_web_page_label_id;
+ALTER TABLE ONLY public.web_page_email_label DROP CONSTRAINT web_page_email_label_email_id_f603b8a1_fk_web_page_email_id;
+ALTER TABLE ONLY public.web_page_contact_contact_user DROP CONSTRAINT web_page_contact_con_userprofile_id_6b236f1a_fk_about_use;
+ALTER TABLE ONLY public.web_page_contact_contact_user DROP CONSTRAINT web_page_contact_con_contact_id_cbbfe31a_fk_web_page_;
+ALTER TABLE ONLY public.django_admin_log DROP CONSTRAINT django_admin_log_user_id_c564eba6_fk_about_user_userprofile_id;
+ALTER TABLE ONLY public.django_admin_log DROP CONSTRAINT django_admin_log_content_type_id_c4bce8eb_fk_django_co;
+ALTER TABLE ONLY public.auth_permission DROP CONSTRAINT auth_permission_content_type_id_2f476e4b_fk_django_co;
+ALTER TABLE ONLY public.auth_group_permissions DROP CONSTRAINT auth_group_permissions_group_id_b120cbf9_fk_auth_group_id;
+ALTER TABLE ONLY public.auth_group_permissions DROP CONSTRAINT auth_group_permissio_permission_id_84c5c92e_fk_auth_perm;
+ALTER TABLE ONLY public.about_user_userprofile_user_permissions DROP CONSTRAINT about_user_userprofi_userprofile_id_c19c6c80_fk_about_use;
+ALTER TABLE ONLY public.about_user_userprofile_groups DROP CONSTRAINT about_user_userprofi_userprofile_id_a9c4a2b0_fk_about_use;
+ALTER TABLE ONLY public.about_user_userprofile_user_permissions DROP CONSTRAINT about_user_userprofi_permission_id_3a001153_fk_auth_perm;
+ALTER TABLE ONLY public.about_user_userprofile_groups DROP CONSTRAINT about_user_userprofi_group_id_0f904e37_fk_auth_grou;
+DROP INDEX public.web_page_signature_user_id_90813285;
+DROP INDEX public.web_page_label_slug_213cefa7_like;
+DROP INDEX public.web_page_email_slug_2fa04289_like;
+DROP INDEX public.web_page_email_signature_id_07cedf72;
+DROP INDEX public.web_page_email_sender_id_c0a0b598;
+DROP INDEX public.web_page_email_receiver_userprofile_id_06ea7c3c;
+DROP INDEX public.web_page_email_receiver_email_id_68466bd4;
+DROP INDEX public.web_page_email_label_label_id_30e8206a;
+DROP INDEX public.web_page_email_label_email_id_f603b8a1;
+DROP INDEX public.web_page_contact_slug_afa049b8_like;
+DROP INDEX public.web_page_contact_contact_user_userprofile_id_6b236f1a;
+DROP INDEX public.web_page_contact_contact_user_contact_id_cbbfe31a;
+DROP INDEX public.django_session_session_key_c0390e0f_like;
+DROP INDEX public.django_session_expire_date_a5c62663;
+DROP INDEX public.django_admin_log_user_id_c564eba6;
+DROP INDEX public.django_admin_log_content_type_id_c4bce8eb;
+DROP INDEX public.auth_permission_content_type_id_2f476e4b;
+DROP INDEX public.auth_group_permissions_permission_id_84c5c92e;
+DROP INDEX public.auth_group_permissions_group_id_b120cbf9;
+DROP INDEX public.auth_group_name_a6ea08ec_like;
+DROP INDEX public.about_user_userprofile_username_b2350b88_like;
+DROP INDEX public.about_user_userprofile_user_permissions_userprofile_id_c19c6c80;
+DROP INDEX public.about_user_userprofile_user_permissions_permission_id_3a001153;
+DROP INDEX public.about_user_userprofile_slug_7cd88cdf_like;
+DROP INDEX public.about_user_userprofile_groups_userprofile_id_a9c4a2b0;
+DROP INDEX public.about_user_userprofile_groups_group_id_0f904e37;
+ALTER TABLE ONLY public.web_page_signature DROP CONSTRAINT web_page_signature_pkey;
+ALTER TABLE ONLY public.web_page_label DROP CONSTRAINT web_page_label_slug_key;
+ALTER TABLE ONLY public.web_page_label DROP CONSTRAINT web_page_label_pkey;
+ALTER TABLE ONLY public.web_page_email DROP CONSTRAINT web_page_email_slug_key;
+ALTER TABLE ONLY public.web_page_email_receiver DROP CONSTRAINT web_page_email_receiver_pkey;
+ALTER TABLE ONLY public.web_page_email_receiver DROP CONSTRAINT web_page_email_receiver_email_id_userprofile_id_724e76bc_uniq;
+ALTER TABLE ONLY public.web_page_email DROP CONSTRAINT web_page_email_pkey;
+ALTER TABLE ONLY public.web_page_email_label DROP CONSTRAINT web_page_email_label_pkey;
+ALTER TABLE ONLY public.web_page_email_label DROP CONSTRAINT web_page_email_label_email_id_label_id_83cbda9f_uniq;
+ALTER TABLE ONLY public.web_page_contact DROP CONSTRAINT web_page_contact_slug_key;
+ALTER TABLE ONLY public.web_page_contact DROP CONSTRAINT web_page_contact_pkey;
+ALTER TABLE ONLY public.web_page_contact_contact_user DROP CONSTRAINT web_page_contact_contact_user_pkey;
+ALTER TABLE ONLY public.web_page_contact_contact_user DROP CONSTRAINT web_page_contact_contact_contact_id_userprofile_i_f2768fd4_uniq;
+ALTER TABLE ONLY public.django_session DROP CONSTRAINT django_session_pkey;
+ALTER TABLE ONLY public.django_migrations DROP CONSTRAINT django_migrations_pkey;
+ALTER TABLE ONLY public.django_content_type DROP CONSTRAINT django_content_type_pkey;
+ALTER TABLE ONLY public.django_content_type DROP CONSTRAINT django_content_type_app_label_model_76bd3d3b_uniq;
+ALTER TABLE ONLY public.django_admin_log DROP CONSTRAINT django_admin_log_pkey;
+ALTER TABLE ONLY public.auth_permission DROP CONSTRAINT auth_permission_pkey;
+ALTER TABLE ONLY public.auth_permission DROP CONSTRAINT auth_permission_content_type_id_codename_01ab375a_uniq;
+ALTER TABLE ONLY public.auth_group DROP CONSTRAINT auth_group_pkey;
+ALTER TABLE ONLY public.auth_group_permissions DROP CONSTRAINT auth_group_permissions_pkey;
+ALTER TABLE ONLY public.auth_group_permissions DROP CONSTRAINT auth_group_permissions_group_id_permission_id_0cd325b0_uniq;
+ALTER TABLE ONLY public.auth_group DROP CONSTRAINT auth_group_name_key;
+ALTER TABLE ONLY public.about_user_userprofile DROP CONSTRAINT about_user_userprofile_username_key;
+ALTER TABLE ONLY public.about_user_userprofile_user_permissions DROP CONSTRAINT about_user_userprofile_user_permissions_pkey;
+ALTER TABLE ONLY public.about_user_userprofile_user_permissions DROP CONSTRAINT about_user_userprofile_u_userprofile_id_permissio_d336dd39_uniq;
+ALTER TABLE ONLY public.about_user_userprofile DROP CONSTRAINT about_user_userprofile_slug_key;
+ALTER TABLE ONLY public.about_user_userprofile DROP CONSTRAINT about_user_userprofile_pkey;
+ALTER TABLE ONLY public.about_user_userprofile_groups DROP CONSTRAINT about_user_userprofile_groups_pkey;
+ALTER TABLE ONLY public.about_user_userprofile_groups DROP CONSTRAINT about_user_userprofile_g_userprofile_id_group_id_fcf7015a_uniq;
+ALTER TABLE public.web_page_signature ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.web_page_label ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.web_page_email_receiver ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.web_page_email_label ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.web_page_email ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.web_page_contact_contact_user ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.web_page_contact ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.django_migrations ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.django_content_type ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.django_admin_log ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.auth_permission ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.auth_group_permissions ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.auth_group ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.about_user_userprofile_user_permissions ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.about_user_userprofile_groups ALTER COLUMN id DROP DEFAULT;
+ALTER TABLE public.about_user_userprofile ALTER COLUMN id DROP DEFAULT;
+DROP SEQUENCE public.web_page_signature_id_seq;
+DROP TABLE public.web_page_signature;
+DROP SEQUENCE public.web_page_label_id_seq;
+DROP TABLE public.web_page_label;
+DROP SEQUENCE public.web_page_email_receiver_id_seq;
+DROP TABLE public.web_page_email_receiver;
+DROP SEQUENCE public.web_page_email_label_id_seq;
+DROP TABLE public.web_page_email_label;
+DROP SEQUENCE public.web_page_email_id_seq;
+DROP TABLE public.web_page_email;
+DROP SEQUENCE public.web_page_contact_id_seq;
+DROP SEQUENCE public.web_page_contact_contact_user_id_seq;
+DROP TABLE public.web_page_contact_contact_user;
+DROP TABLE public.web_page_contact;
+DROP TABLE public.django_session;
+DROP SEQUENCE public.django_migrations_id_seq;
+DROP TABLE public.django_migrations;
+DROP SEQUENCE public.django_content_type_id_seq;
+DROP TABLE public.django_content_type;
+DROP SEQUENCE public.django_admin_log_id_seq;
+DROP TABLE public.django_admin_log;
+DROP SEQUENCE public.auth_permission_id_seq;
+DROP TABLE public.auth_permission;
+DROP SEQUENCE public.auth_group_permissions_id_seq;
+DROP TABLE public.auth_group_permissions;
+DROP SEQUENCE public.auth_group_id_seq;
+DROP TABLE public.auth_group;
+DROP SEQUENCE public.about_user_userprofile_user_permissions_id_seq;
+DROP TABLE public.about_user_userprofile_user_permissions;
+DROP SEQUENCE public.about_user_userprofile_id_seq;
+DROP SEQUENCE public.about_user_userprofile_groups_id_seq;
+DROP TABLE public.about_user_userprofile_groups;
+DROP TABLE public.about_user_userprofile;
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: about_user_userprofile; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.about_user_userprofile (
+    id bigint NOT NULL,
+    password character varying(128) NOT NULL,
+    last_login timestamp with time zone,
+    is_superuser boolean NOT NULL,
+    username character varying(150) NOT NULL,
+    first_name character varying(150) NOT NULL,
+    last_name character varying(150) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    date_joined timestamp with time zone NOT NULL,
+    email character varying(254),
+    phone_number character varying(11),
+    birth_date date,
+    gender character varying(1),
+    country character varying(2),
+    slug character varying(100)
+);
+
+
+ALTER TABLE public.about_user_userprofile OWNER TO postgres;
+
+--
+-- Name: about_user_userprofile_groups; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.about_user_userprofile_groups (
+    id bigint NOT NULL,
+    userprofile_id bigint NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE public.about_user_userprofile_groups OWNER TO postgres;
+
+--
+-- Name: about_user_userprofile_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.about_user_userprofile_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.about_user_userprofile_groups_id_seq OWNER TO postgres;
+
+--
+-- Name: about_user_userprofile_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.about_user_userprofile_groups_id_seq OWNED BY public.about_user_userprofile_groups.id;
+
+
+--
+-- Name: about_user_userprofile_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.about_user_userprofile_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.about_user_userprofile_id_seq OWNER TO postgres;
+
+--
+-- Name: about_user_userprofile_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.about_user_userprofile_id_seq OWNED BY public.about_user_userprofile.id;
+
+
+--
+-- Name: about_user_userprofile_user_permissions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.about_user_userprofile_user_permissions (
+    id bigint NOT NULL,
+    userprofile_id bigint NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.about_user_userprofile_user_permissions OWNER TO postgres;
+
+--
+-- Name: about_user_userprofile_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.about_user_userprofile_user_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.about_user_userprofile_user_permissions_id_seq OWNER TO postgres;
+
+--
+-- Name: about_user_userprofile_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.about_user_userprofile_user_permissions_id_seq OWNED BY public.about_user_userprofile_user_permissions.id;
+
+
+--
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_group (
+    id integer NOT NULL,
+    name character varying(150) NOT NULL
+);
+
+
+ALTER TABLE public.auth_group OWNER TO postgres;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_group_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_id_seq OWNER TO postgres;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_group_id_seq OWNED BY public.auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_group_permissions (
+    id bigint NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_group_permissions OWNER TO postgres;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_group_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_permissions_id_seq OWNER TO postgres;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_group_permissions_id_seq OWNED BY public.auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.auth_permission (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.auth_permission OWNER TO postgres;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.auth_permission_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_permission_id_seq OWNER TO postgres;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.auth_permission_id_seq OWNED BY public.auth_permission.id;
+
+
+--
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    content_type_id integer,
+    user_id bigint NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE public.django_admin_log OWNER TO postgres;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.django_admin_log_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_admin_log_id_seq OWNER TO postgres;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.django_admin_log_id_seq OWNED BY public.django_admin_log.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_content_type (
+    id integer NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.django_content_type OWNER TO postgres;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.django_content_type_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_content_type_id_seq OWNER TO postgres;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.django_content_type_id_seq OWNED BY public.django_content_type.id;
+
+
+--
+-- Name: django_migrations; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_migrations (
+    id bigint NOT NULL,
+    app character varying(255) NOT NULL,
+    name character varying(255) NOT NULL,
+    applied timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_migrations OWNER TO postgres;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.django_migrations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_migrations_id_seq OWNER TO postgres;
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.django_migrations_id_seq OWNED BY public.django_migrations.id;
+
+
+--
+-- Name: django_session; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_session OWNER TO postgres;
+
+--
+-- Name: web_page_contact; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.web_page_contact (
+    id bigint NOT NULL,
+    first_name character varying(50) NOT NULL,
+    last_name character varying(50) NOT NULL,
+    email character varying(254) NOT NULL,
+    profile_photo character varying(100),
+    phone_number character varying(11),
+    birth_date date,
+    slug character varying(100)
+);
+
+
+ALTER TABLE public.web_page_contact OWNER TO postgres;
+
+--
+-- Name: web_page_contact_contact_user; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.web_page_contact_contact_user (
+    id bigint NOT NULL,
+    contact_id bigint NOT NULL,
+    userprofile_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.web_page_contact_contact_user OWNER TO postgres;
+
+--
+-- Name: web_page_contact_contact_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.web_page_contact_contact_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.web_page_contact_contact_user_id_seq OWNER TO postgres;
+
+--
+-- Name: web_page_contact_contact_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.web_page_contact_contact_user_id_seq OWNED BY public.web_page_contact_contact_user.id;
+
+
+--
+-- Name: web_page_contact_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.web_page_contact_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.web_page_contact_id_seq OWNER TO postgres;
+
+--
+-- Name: web_page_contact_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.web_page_contact_id_seq OWNED BY public.web_page_contact.id;
+
+
+--
+-- Name: web_page_email; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.web_page_email (
+    id bigint NOT NULL,
+    subject character varying(100),
+    text text,
+    file character varying(100),
+    created timestamp with time zone NOT NULL,
+    edited timestamp with time zone NOT NULL,
+    is_sent boolean NOT NULL,
+    is_inbox boolean NOT NULL,
+    is_archive boolean NOT NULL,
+    is_draft boolean NOT NULL,
+    is_trash boolean NOT NULL,
+    is_read boolean NOT NULL,
+    slug character varying(100),
+    signature_id bigint,
+    sender_id bigint
+);
+
+
+ALTER TABLE public.web_page_email OWNER TO postgres;
+
+--
+-- Name: web_page_email_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.web_page_email_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.web_page_email_id_seq OWNER TO postgres;
+
+--
+-- Name: web_page_email_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.web_page_email_id_seq OWNED BY public.web_page_email.id;
+
+
+--
+-- Name: web_page_email_label; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.web_page_email_label (
+    id bigint NOT NULL,
+    email_id bigint NOT NULL,
+    label_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.web_page_email_label OWNER TO postgres;
+
+--
+-- Name: web_page_email_label_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.web_page_email_label_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.web_page_email_label_id_seq OWNER TO postgres;
+
+--
+-- Name: web_page_email_label_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.web_page_email_label_id_seq OWNED BY public.web_page_email_label.id;
+
+
+--
+-- Name: web_page_email_receiver; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.web_page_email_receiver (
+    id bigint NOT NULL,
+    email_id bigint NOT NULL,
+    contact_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.web_page_email_receiver OWNER TO postgres;
+
+--
+-- Name: web_page_email_receiver_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.web_page_email_receiver_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.web_page_email_receiver_id_seq OWNER TO postgres;
+
+--
+-- Name: web_page_email_receiver_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.web_page_email_receiver_id_seq OWNED BY public.web_page_email_receiver.id;
+
+
+--
+-- Name: web_page_label; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.web_page_label (
+    id bigint NOT NULL,
+    title character varying(100) NOT NULL,
+    slug character varying(100)
+);
+
+
+ALTER TABLE public.web_page_label OWNER TO postgres;
+
+--
+-- Name: web_page_label_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.web_page_label_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.web_page_label_id_seq OWNER TO postgres;
+
+--
+-- Name: web_page_label_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.web_page_label_id_seq OWNED BY public.web_page_label.id;
+
+
+--
+-- Name: web_page_signature; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.web_page_signature (
+    id bigint NOT NULL,
+    text character varying(100) NOT NULL,
+    photo character varying(100),
+    user_id bigint NOT NULL
+);
+
+
+ALTER TABLE public.web_page_signature OWNER TO postgres;
+
+--
+-- Name: web_page_signature_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.web_page_signature_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.web_page_signature_id_seq OWNER TO postgres;
+
+--
+-- Name: web_page_signature_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.web_page_signature_id_seq OWNED BY public.web_page_signature.id;
+
+
+--
+-- Name: about_user_userprofile id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.about_user_userprofile ALTER COLUMN id SET DEFAULT nextval('public.about_user_userprofile_id_seq'::regclass);
+
+
+--
+-- Name: about_user_userprofile_groups id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.about_user_userprofile_groups ALTER COLUMN id SET DEFAULT nextval('public.about_user_userprofile_groups_id_seq'::regclass);
+
+
+--
+-- Name: about_user_userprofile_user_permissions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.about_user_userprofile_user_permissions ALTER COLUMN id SET DEFAULT nextval('public.about_user_userprofile_user_permissions_id_seq'::regclass);
+
+
+--
+-- Name: auth_group id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group ALTER COLUMN id SET DEFAULT nextval('public.auth_group_id_seq'::regclass);
+
+
+--
+-- Name: auth_group_permissions id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('public.auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: auth_permission id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission ALTER COLUMN id SET DEFAULT nextval('public.auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: django_admin_log id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log ALTER COLUMN id SET DEFAULT nextval('public.django_admin_log_id_seq'::regclass);
+
+
+--
+-- Name: django_content_type id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_content_type ALTER COLUMN id SET DEFAULT nextval('public.django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: django_migrations id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_migrations ALTER COLUMN id SET DEFAULT nextval('public.django_migrations_id_seq'::regclass);
+
+
+--
+-- Name: web_page_contact id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_contact ALTER COLUMN id SET DEFAULT nextval('public.web_page_contact_id_seq'::regclass);
+
+
+--
+-- Name: web_page_contact_contact_user id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_contact_contact_user ALTER COLUMN id SET DEFAULT nextval('public.web_page_contact_contact_user_id_seq'::regclass);
+
+
+--
+-- Name: web_page_email id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email ALTER COLUMN id SET DEFAULT nextval('public.web_page_email_id_seq'::regclass);
+
+
+--
+-- Name: web_page_email_label id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email_label ALTER COLUMN id SET DEFAULT nextval('public.web_page_email_label_id_seq'::regclass);
+
+
+--
+-- Name: web_page_email_receiver id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email_receiver ALTER COLUMN id SET DEFAULT nextval('public.web_page_email_receiver_id_seq'::regclass);
+
+
+--
+-- Name: web_page_label id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_label ALTER COLUMN id SET DEFAULT nextval('public.web_page_label_id_seq'::regclass);
+
+
+--
+-- Name: web_page_signature id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_signature ALTER COLUMN id SET DEFAULT nextval('public.web_page_signature_id_seq'::regclass);
+
+
+--
+-- Data for Name: about_user_userprofile; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.about_user_userprofile (id, password, last_login, is_superuser, username, first_name, last_name, is_staff, is_active, date_joined, email, phone_number, birth_date, gender, country, slug) FROM stdin;
+2	pbkdf2_sha256$260000$i6GCHVLUQGDPvfqim5rESt$r/ablfmQ3VysSYkGAGu7TuDamNb7ipY6Cjybm6uy63Q=	\N	f	maryam_			f	f	2022-02-22 12:13:52.934435+00	mrymsheikhhadi@gmail.com	\N	\N	\N	\N	\N
+3	pbkdf2_sha256$260000$ut83vYdrQ7y0BsvfrP5stT$viH3VWVLWUOGfLk3XXwaMASaSuY2rDF5BxT2GioMFe8=	2022-02-22 16:06:57.205621+00	f	gishamohebi@gmail.com			f	t	2022-02-22 16:04:38.216848+00	mrymsheikhhadi@gmail.com	\N	\N	\N	\N	\N
+4	pbkdf2_sha256$260000$2AUKxJanawlteKD6Ix4SkS$NGcuKtF0WgyFbg9G7t4XIBhrzPyK85dGVMFayZvZjos=	2022-02-22 19:55:19.164393+00	f	mahshad_azizi@gmail.com			f	t	2022-02-22 19:53:53.117554+00	mrymsheikhhadi@gmail.com	\N	\N	\N	\N	\N
+5	pbkdf2_sha256$260000$ELeSS1ADMeKgNk4QFeavlx$jC5gqgtmPn5XdgGF5UoN3j88+0gS4AuTcQGdcDz00qQ=	\N	f	tapesh_amri@gmail.com			f	t	2022-02-23 11:36:45.689719+00	mrymsheikhhadi@gmail.com	\N	\N	\N	\N	\N
+6	pbkdf2_sha256$260000$lppsayai4K0Pf6UHH8QzIZ$p5rt09oUMc7gfkJ/wKrJkN1wqFSrl36Tpi22QadYWw4=	\N	f	tapesh_amri			f	f	2022-02-23 11:48:30.892073+00	mrymsheikhhadi@gmail.com	\N	\N	\N	\N	\N
+7	pbkdf2_sha256$260000$nMgBUMcP0KJr5BYFwEcfPa$rp1kCwlJT+p284RiaarOWkJ7oqbjc991FYxLZQRzWkE=	\N	f	tara_shafiei			f	f	2022-02-23 11:55:01.473488+00	mrymsheikhhadi@gmail.com	\N	\N	\N	\N	\N
+8	pbkdf2_sha256$260000$3eTM5g0lqnfEisMeubk70p$DS82zqYapkEqpOXwmx+AKTzDwnmNnyfAFnjTwxgJNiY=	\N	f	tara_shafiei_			f	f	2022-02-23 11:55:54.739572+00	mrymsheikhhadi@gmail.com	\N	\N	\N	\N	\N
+9	pbkdf2_sha256$260000$pKIRYSZsSEFLaaySThZ12d$gGvGCORBNdWu97bCWnw1U1IlMtwfqtfxnHVQloRwj10=	\N	f	tara_shafiei_2			f	f	2022-02-23 11:58:06.946389+00	mrymsheikhhadi@gmail.com	\N	\N	\N	\N	\N
+10	pbkdf2_sha256$260000$VCZvXljmXZXtJKeK2uXMyx$4t2ohdT2/QghV7TiPD3IrpBuH/5GkoMKd/kbUKzOOfQ=	\N	f	tara_shafiei_3			f	f	2022-02-23 12:23:19.29566+00		\N	\N	\N	\N	\N
+11	pbkdf2_sha256$260000$5B07hPxjdbWJF6MVbwLR5y$WmqU8vYb/hct4QVnYO3KykEgofnSOVhNkXnrHxocMkQ=	\N	f	maryam_siruei			f	f	2022-02-23 15:15:18.18018+00	mrymsheikhhadi@gmail.com	\N	\N	\N	\N	\N
+12	pbkdf2_sha256$260000$iyHCZGlhdqhxzEEZW4DCy7$dSxqjAt4JnhZ7PvOsrG/izBLlcophWiBLsXK5L4swVw=	\N	f	zahra_mehrzad			f	f	2022-02-23 15:17:36.493659+00		\N	\N	\N	\N	\N
+13	pbkdf2_sha256$260000$LK3nUPlUEDmvY1eDoRDg1j$EDrhM48Dej+zRdpf4Q+yo4wB9EwC+UABL1xvYSVdNkk=	\N	f	zeinab_r1392			f	f	2022-02-23 16:00:04.896904+00	mrymsheikhhadi@gmail.com	\N	\N	F	IR	\N
+1	pbkdf2_sha256$260000$MiKFveu9QHzsY1538GeGjb$EAkVgnIbow99KZApD6o7dMz9vrw5rfrRjExpxqO/YCA=	2022-02-23 21:19:32.737184+00	t	maryam			t	t	2022-02-22 10:33:40.972512+00		\N	\N	\N	\N	\N
+\.
+
+
+--
+-- Data for Name: about_user_userprofile_groups; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.about_user_userprofile_groups (id, userprofile_id, group_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: about_user_userprofile_user_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.about_user_userprofile_user_permissions (id, userprofile_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_group; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_group (id, name) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_group_permissions; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_group_permissions (id, group_id, permission_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: auth_permission; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
+1	Can add log entry	1	add_logentry
+2	Can change log entry	1	change_logentry
+3	Can delete log entry	1	delete_logentry
+4	Can view log entry	1	view_logentry
+5	Can add permission	2	add_permission
+6	Can change permission	2	change_permission
+7	Can delete permission	2	delete_permission
+8	Can view permission	2	view_permission
+9	Can add group	3	add_group
+10	Can change group	3	change_group
+11	Can delete group	3	delete_group
+12	Can view group	3	view_group
+13	Can add content type	4	add_contenttype
+14	Can change content type	4	change_contenttype
+15	Can delete content type	4	delete_contenttype
+16	Can view content type	4	view_contenttype
+17	Can add session	5	add_session
+18	Can change session	5	change_session
+19	Can delete session	5	delete_session
+20	Can view session	5	view_session
+21	Can add user	6	add_userprofile
+22	Can change user	6	change_userprofile
+23	Can delete user	6	delete_userprofile
+24	Can view user	6	view_userprofile
+25	Can add signature	7	add_signature
+26	Can change signature	7	change_signature
+27	Can delete signature	7	delete_signature
+28	Can view signature	7	view_signature
+29	Can add label	8	add_label
+30	Can change label	8	change_label
+31	Can delete label	8	delete_label
+32	Can view label	8	view_label
+33	Can add email	9	add_email
+34	Can change email	9	change_email
+35	Can delete email	9	delete_email
+36	Can view email	9	view_email
+37	Can add contact	10	add_contact
+38	Can change contact	10	change_contact
+39	Can delete contact	10	delete_contact
+40	Can view contact	10	view_contact
+\.
+
+
+--
+-- Data for Name: django_admin_log; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_admin_log (id, action_time, object_id, object_repr, action_flag, change_message, content_type_id, user_id) FROM stdin;
+1	2022-02-23 21:23:36.475618+00	1	Contact object (1)	1	[{"added": {}}]	10	1
+2	2022-02-24 18:36:13.853855+00	1	Label object (1)	1	[{"added": {}}]	8	1
+\.
+
+
+--
+-- Data for Name: django_content_type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_content_type (id, app_label, model) FROM stdin;
+1	admin	logentry
+2	auth	permission
+3	auth	group
+4	contenttypes	contenttype
+5	sessions	session
+6	about_user	userprofile
+7	web_page	signature
+8	web_page	label
+9	web_page	email
+10	web_page	contact
+\.
+
+
+--
+-- Data for Name: django_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_migrations (id, app, name, applied) FROM stdin;
+1	contenttypes	0001_initial	2022-02-22 10:32:50.337154+00
+2	contenttypes	0002_remove_content_type_name	2022-02-22 10:32:50.481614+00
+3	auth	0001_initial	2022-02-22 10:32:51.71465+00
+4	auth	0002_alter_permission_name_max_length	2022-02-22 10:32:51.724647+00
+5	auth	0003_alter_user_email_max_length	2022-02-22 10:32:51.73764+00
+6	auth	0004_alter_user_username_opts	2022-02-22 10:32:51.750106+00
+7	auth	0005_alter_user_last_login_null	2022-02-22 10:32:51.763099+00
+8	auth	0006_require_contenttypes_0002	2022-02-22 10:32:51.767101+00
+9	auth	0007_alter_validators_add_error_messages	2022-02-22 10:32:51.781089+00
+10	auth	0008_alter_user_username_max_length	2022-02-22 10:32:51.79592+00
+11	auth	0009_alter_user_last_name_max_length	2022-02-22 10:32:51.816907+00
+12	auth	0010_alter_group_name_max_length	2022-02-22 10:32:52.262055+00
+13	auth	0011_update_proxy_permissions	2022-02-22 10:32:52.349639+00
+14	auth	0012_alter_user_first_name_max_length	2022-02-22 10:32:52.455037+00
+15	about_user	0001_initial	2022-02-22 10:32:54.283274+00
+16	admin	0001_initial	2022-02-22 10:32:54.668063+00
+17	admin	0002_logentry_remove_auto_add	2022-02-22 10:32:54.685051+00
+18	admin	0003_logentry_add_action_flag_choices	2022-02-22 10:32:54.701043+00
+19	sessions	0001_initial	2022-02-22 10:32:54.890209+00
+20	web_page	0001_initial	2022-02-22 10:45:09.29009+00
+21	about_user	0002_alter_userprofile_managers	2022-02-23 21:10:31.228626+00
+22	web_page	0002_auto_20220224_0040	2022-02-23 21:10:32.457173+00
+23	web_page	0003_auto_20220224_0132	2022-02-23 22:02:47.521903+00
+\.
+
+
+--
+-- Data for Name: django_session; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
+xukz4dngg6i977l137dphx9b8zssjt9h	e30:1nMUNE:K6zQ1ZI37vlkLQC2C24tW6cgizSCHDGUsphu_fbF4Jg	2022-03-08 12:34:32.803216+00
+2ugc8gwo63b7hxikly7cyv2tfrp8inl9	e30:1nMUNu:auHBHK7472bP1D1vUTDct1OnAxSlg_9D0UkUDdmLRl4	2022-03-08 12:35:14.49488+00
+pcd0jl9s0jktxyrykcdxhwmk4eyqk5cg	e30:1nMUTV:h1oM5954jOsPgg-7rYRnyso2QtI_yenMQVK5GNMkdNk	2022-03-08 12:41:01.741867+00
+5vgdcbeg05rm8mt59kfywvrqrmcws0v2	e30:1nMXJ0:q1LN_Nmu_oKFPN40M0sSrOgqJdfJA3hr0Mbvqjrm3u4	2022-03-08 15:42:22.152325+00
+xm1r0d91nrlakdji0l5dwgizaprjsyb8	.eJxVjEEOwiAQRe_C2hBgkFKX7j0DmWFGqRpISrsy3l2bdKHb_977L5VwXUpau8xpYnVSXh1-N8L8kLoBvmO9NZ1bXeaJ9KbonXZ9aSzP8-7-HRTs5VsDUDAxBDYgaDHCOBDIaDD7iGKct4aF4cpMNnNGFwd0hA6io3hkq94f5MY4Qg:1nMbFn:yiY5IFDeG4RnvYjbE3Cd_oR8KIDZfFn5-NtrVZtu-6E	2022-03-08 19:55:19.174386+00
+cr99atblq6w6l6adlqskl3flrg6obgpy	.eJxVjEEOwiAQRe_C2pAZCgFduvcMZBgGqRqalHbVeHdt0oVu_3vvbyrSutS4dpnjmNVFoTr9bon4KW0H-UHtPmme2jKPSe-KPmjXtynL63q4fweVev3W7EMKHgiDOBscZiQ0A4KgWG8tSRkKnA04ZuNCMjkXC0CCnsEHNur9AcjwN1Y:1nMz2q:KYA5i8FzQ-PwgvT9ZjR7xHaD7XMnz2dJmeqPaFgO0c8	2022-03-09 21:19:32.760168+00
+\.
+
+
+--
+-- Data for Name: web_page_contact; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.web_page_contact (id, first_name, last_name, email, profile_photo, phone_number, birth_date, slug) FROM stdin;
+1	tara	shafiei	mrymsheikhhadi@gmail.com		\N	\N	first-contact
+\.
+
+
+--
+-- Data for Name: web_page_contact_contact_user; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.web_page_contact_contact_user (id, contact_id, userprofile_id) FROM stdin;
+1	1	1
+\.
+
+
+--
+-- Data for Name: web_page_email; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.web_page_email (id, subject, text, file, created, edited, is_sent, is_inbox, is_archive, is_draft, is_trash, is_read, slug, signature_id, sender_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: web_page_email_label; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.web_page_email_label (id, email_id, label_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: web_page_email_receiver; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.web_page_email_receiver (id, email_id, contact_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: web_page_label; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.web_page_label (id, title, slug) FROM stdin;
+1	archive	archive
+\.
+
+
+--
+-- Data for Name: web_page_signature; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.web_page_signature (id, text, photo, user_id) FROM stdin;
+\.
+
+
+--
+-- Name: about_user_userprofile_groups_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.about_user_userprofile_groups_id_seq', 1, false);
+
+
+--
+-- Name: about_user_userprofile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.about_user_userprofile_id_seq', 13, true);
+
+
+--
+-- Name: about_user_userprofile_user_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.about_user_userprofile_user_permissions_id_seq', 1, false);
+
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_group_id_seq', 1, false);
+
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
+
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 40, true);
+
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_admin_log_id_seq', 2, true);
+
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_content_type_id_seq', 10, true);
+
+
+--
+-- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 23, true);
+
+
+--
+-- Name: web_page_contact_contact_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.web_page_contact_contact_user_id_seq', 1, true);
+
+
+--
+-- Name: web_page_contact_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.web_page_contact_id_seq', 1, true);
+
+
+--
+-- Name: web_page_email_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.web_page_email_id_seq', 1, false);
+
+
+--
+-- Name: web_page_email_label_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.web_page_email_label_id_seq', 1, false);
+
+
+--
+-- Name: web_page_email_receiver_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.web_page_email_receiver_id_seq', 1, false);
+
+
+--
+-- Name: web_page_label_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.web_page_label_id_seq', 1, true);
+
+
+--
+-- Name: web_page_signature_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.web_page_signature_id_seq', 1, false);
+
+
+--
+-- Name: about_user_userprofile_groups about_user_userprofile_g_userprofile_id_group_id_fcf7015a_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.about_user_userprofile_groups
+    ADD CONSTRAINT about_user_userprofile_g_userprofile_id_group_id_fcf7015a_uniq UNIQUE (userprofile_id, group_id);
+
+
+--
+-- Name: about_user_userprofile_groups about_user_userprofile_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.about_user_userprofile_groups
+    ADD CONSTRAINT about_user_userprofile_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: about_user_userprofile about_user_userprofile_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.about_user_userprofile
+    ADD CONSTRAINT about_user_userprofile_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: about_user_userprofile about_user_userprofile_slug_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.about_user_userprofile
+    ADD CONSTRAINT about_user_userprofile_slug_key UNIQUE (slug);
+
+
+--
+-- Name: about_user_userprofile_user_permissions about_user_userprofile_u_userprofile_id_permissio_d336dd39_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.about_user_userprofile_user_permissions
+    ADD CONSTRAINT about_user_userprofile_u_userprofile_id_permissio_d336dd39_uniq UNIQUE (userprofile_id, permission_id);
+
+
+--
+-- Name: about_user_userprofile_user_permissions about_user_userprofile_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.about_user_userprofile_user_permissions
+    ADD CONSTRAINT about_user_userprofile_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: about_user_userprofile about_user_userprofile_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.about_user_userprofile
+    ADD CONSTRAINT about_user_userprofile_username_key UNIQUE (username);
+
+
+--
+-- Name: auth_group auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_permission_id_0cd325b0_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_0cd325b0_uniq UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_codename_01ab375a_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_01ab375a_uniq UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_admin_log django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type django_content_type_app_label_model_76bd3d3b_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_app_label_model_76bd3d3b_uniq UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_migrations django_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_migrations
+    ADD CONSTRAINT django_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_session django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: web_page_contact_contact_user web_page_contact_contact_contact_id_userprofile_i_f2768fd4_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_contact_contact_user
+    ADD CONSTRAINT web_page_contact_contact_contact_id_userprofile_i_f2768fd4_uniq UNIQUE (contact_id, userprofile_id);
+
+
+--
+-- Name: web_page_contact_contact_user web_page_contact_contact_user_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_contact_contact_user
+    ADD CONSTRAINT web_page_contact_contact_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: web_page_contact web_page_contact_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_contact
+    ADD CONSTRAINT web_page_contact_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: web_page_contact web_page_contact_slug_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_contact
+    ADD CONSTRAINT web_page_contact_slug_key UNIQUE (slug);
+
+
+--
+-- Name: web_page_email_label web_page_email_label_email_id_label_id_83cbda9f_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email_label
+    ADD CONSTRAINT web_page_email_label_email_id_label_id_83cbda9f_uniq UNIQUE (email_id, label_id);
+
+
+--
+-- Name: web_page_email_label web_page_email_label_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email_label
+    ADD CONSTRAINT web_page_email_label_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: web_page_email web_page_email_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email
+    ADD CONSTRAINT web_page_email_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: web_page_email_receiver web_page_email_receiver_email_id_userprofile_id_724e76bc_uniq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email_receiver
+    ADD CONSTRAINT web_page_email_receiver_email_id_userprofile_id_724e76bc_uniq UNIQUE (email_id, contact_id);
+
+
+--
+-- Name: web_page_email_receiver web_page_email_receiver_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email_receiver
+    ADD CONSTRAINT web_page_email_receiver_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: web_page_email web_page_email_slug_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email
+    ADD CONSTRAINT web_page_email_slug_key UNIQUE (slug);
+
+
+--
+-- Name: web_page_label web_page_label_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_label
+    ADD CONSTRAINT web_page_label_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: web_page_label web_page_label_slug_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_label
+    ADD CONSTRAINT web_page_label_slug_key UNIQUE (slug);
+
+
+--
+-- Name: web_page_signature web_page_signature_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_signature
+    ADD CONSTRAINT web_page_signature_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: about_user_userprofile_groups_group_id_0f904e37; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX about_user_userprofile_groups_group_id_0f904e37 ON public.about_user_userprofile_groups USING btree (group_id);
+
+
+--
+-- Name: about_user_userprofile_groups_userprofile_id_a9c4a2b0; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX about_user_userprofile_groups_userprofile_id_a9c4a2b0 ON public.about_user_userprofile_groups USING btree (userprofile_id);
+
+
+--
+-- Name: about_user_userprofile_slug_7cd88cdf_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX about_user_userprofile_slug_7cd88cdf_like ON public.about_user_userprofile USING btree (slug varchar_pattern_ops);
+
+
+--
+-- Name: about_user_userprofile_user_permissions_permission_id_3a001153; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX about_user_userprofile_user_permissions_permission_id_3a001153 ON public.about_user_userprofile_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: about_user_userprofile_user_permissions_userprofile_id_c19c6c80; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX about_user_userprofile_user_permissions_userprofile_id_c19c6c80 ON public.about_user_userprofile_user_permissions USING btree (userprofile_id);
+
+
+--
+-- Name: about_user_userprofile_username_b2350b88_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX about_user_userprofile_username_b2350b88_like ON public.about_user_userprofile USING btree (username varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_name_a6ea08ec_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_group_name_a6ea08ec_like ON public.auth_group USING btree (name varchar_pattern_ops);
+
+
+--
+-- Name: auth_group_permissions_group_id_b120cbf9; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_group_permissions_group_id_b120cbf9 ON public.auth_group_permissions USING btree (group_id);
+
+
+--
+-- Name: auth_group_permissions_permission_id_84c5c92e; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_group_permissions_permission_id_84c5c92e ON public.auth_group_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_permission_content_type_id_2f476e4b; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX auth_permission_content_type_id_2f476e4b ON public.auth_permission USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_content_type_id_c4bce8eb; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_admin_log_content_type_id_c4bce8eb ON public.django_admin_log USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_user_id_c564eba6; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_admin_log_user_id_c564eba6 ON public.django_admin_log USING btree (user_id);
+
+
+--
+-- Name: django_session_expire_date_a5c62663; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_session_expire_date_a5c62663 ON public.django_session USING btree (expire_date);
+
+
+--
+-- Name: django_session_session_key_c0390e0f_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX django_session_session_key_c0390e0f_like ON public.django_session USING btree (session_key varchar_pattern_ops);
+
+
+--
+-- Name: web_page_contact_contact_user_contact_id_cbbfe31a; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX web_page_contact_contact_user_contact_id_cbbfe31a ON public.web_page_contact_contact_user USING btree (contact_id);
+
+
+--
+-- Name: web_page_contact_contact_user_userprofile_id_6b236f1a; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX web_page_contact_contact_user_userprofile_id_6b236f1a ON public.web_page_contact_contact_user USING btree (userprofile_id);
+
+
+--
+-- Name: web_page_contact_slug_afa049b8_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX web_page_contact_slug_afa049b8_like ON public.web_page_contact USING btree (slug varchar_pattern_ops);
+
+
+--
+-- Name: web_page_email_label_email_id_f603b8a1; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX web_page_email_label_email_id_f603b8a1 ON public.web_page_email_label USING btree (email_id);
+
+
+--
+-- Name: web_page_email_label_label_id_30e8206a; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX web_page_email_label_label_id_30e8206a ON public.web_page_email_label USING btree (label_id);
+
+
+--
+-- Name: web_page_email_receiver_email_id_68466bd4; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX web_page_email_receiver_email_id_68466bd4 ON public.web_page_email_receiver USING btree (email_id);
+
+
+--
+-- Name: web_page_email_receiver_userprofile_id_06ea7c3c; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX web_page_email_receiver_userprofile_id_06ea7c3c ON public.web_page_email_receiver USING btree (contact_id);
+
+
+--
+-- Name: web_page_email_sender_id_c0a0b598; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX web_page_email_sender_id_c0a0b598 ON public.web_page_email USING btree (sender_id);
+
+
+--
+-- Name: web_page_email_signature_id_07cedf72; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX web_page_email_signature_id_07cedf72 ON public.web_page_email USING btree (signature_id);
+
+
+--
+-- Name: web_page_email_slug_2fa04289_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX web_page_email_slug_2fa04289_like ON public.web_page_email USING btree (slug varchar_pattern_ops);
+
+
+--
+-- Name: web_page_label_slug_213cefa7_like; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX web_page_label_slug_213cefa7_like ON public.web_page_label USING btree (slug varchar_pattern_ops);
+
+
+--
+-- Name: web_page_signature_user_id_90813285; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX web_page_signature_user_id_90813285 ON public.web_page_signature USING btree (user_id);
+
+
+--
+-- Name: about_user_userprofile_groups about_user_userprofi_group_id_0f904e37_fk_auth_grou; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.about_user_userprofile_groups
+    ADD CONSTRAINT about_user_userprofi_group_id_0f904e37_fk_auth_grou FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: about_user_userprofile_user_permissions about_user_userprofi_permission_id_3a001153_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.about_user_userprofile_user_permissions
+    ADD CONSTRAINT about_user_userprofi_permission_id_3a001153_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: about_user_userprofile_groups about_user_userprofi_userprofile_id_a9c4a2b0_fk_about_use; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.about_user_userprofile_groups
+    ADD CONSTRAINT about_user_userprofi_userprofile_id_a9c4a2b0_fk_about_use FOREIGN KEY (userprofile_id) REFERENCES public.about_user_userprofile(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: about_user_userprofile_user_permissions about_user_userprofi_userprofile_id_c19c6c80_fk_about_use; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.about_user_userprofile_user_permissions
+    ADD CONSTRAINT about_user_userprofi_userprofile_id_c19c6c80_fk_about_use FOREIGN KEY (userprofile_id) REFERENCES public.about_user_userprofile(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permissio_permission_id_84c5c92e_fk_auth_perm; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissio_permission_id_84c5c92e_fk_auth_perm FOREIGN KEY (permission_id) REFERENCES public.auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_group_permissions auth_group_permissions_group_id_b120cbf9_fk_auth_group_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_b120cbf9_fk_auth_group_id FOREIGN KEY (group_id) REFERENCES public.auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_permission auth_permission_content_type_id_2f476e4b_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_2f476e4b_fk_django_co FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_content_type_id_c4bce8eb_fk_django_co; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_content_type_id_c4bce8eb_fk_django_co FOREIGN KEY (content_type_id) REFERENCES public.django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log django_admin_log_user_id_c564eba6_fk_about_user_userprofile_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_c564eba6_fk_about_user_userprofile_id FOREIGN KEY (user_id) REFERENCES public.about_user_userprofile(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: web_page_contact_contact_user web_page_contact_con_contact_id_cbbfe31a_fk_web_page_; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_contact_contact_user
+    ADD CONSTRAINT web_page_contact_con_contact_id_cbbfe31a_fk_web_page_ FOREIGN KEY (contact_id) REFERENCES public.web_page_contact(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: web_page_contact_contact_user web_page_contact_con_userprofile_id_6b236f1a_fk_about_use; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_contact_contact_user
+    ADD CONSTRAINT web_page_contact_con_userprofile_id_6b236f1a_fk_about_use FOREIGN KEY (userprofile_id) REFERENCES public.about_user_userprofile(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: web_page_email_label web_page_email_label_email_id_f603b8a1_fk_web_page_email_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email_label
+    ADD CONSTRAINT web_page_email_label_email_id_f603b8a1_fk_web_page_email_id FOREIGN KEY (email_id) REFERENCES public.web_page_email(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: web_page_email_label web_page_email_label_label_id_30e8206a_fk_web_page_label_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email_label
+    ADD CONSTRAINT web_page_email_label_label_id_30e8206a_fk_web_page_label_id FOREIGN KEY (label_id) REFERENCES public.web_page_label(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: web_page_email_receiver web_page_email_recei_contact_id_5cfc704d_fk_web_page_; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email_receiver
+    ADD CONSTRAINT web_page_email_recei_contact_id_5cfc704d_fk_web_page_ FOREIGN KEY (contact_id) REFERENCES public.web_page_contact(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: web_page_email_receiver web_page_email_receiver_email_id_68466bd4_fk_web_page_email_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email_receiver
+    ADD CONSTRAINT web_page_email_receiver_email_id_68466bd4_fk_web_page_email_id FOREIGN KEY (email_id) REFERENCES public.web_page_email(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: web_page_email web_page_email_sender_id_c0a0b598_fk_about_user_userprofile_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email
+    ADD CONSTRAINT web_page_email_sender_id_c0a0b598_fk_about_user_userprofile_id FOREIGN KEY (sender_id) REFERENCES public.about_user_userprofile(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: web_page_email web_page_email_signature_id_07cedf72_fk_web_page_signature_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_email
+    ADD CONSTRAINT web_page_email_signature_id_07cedf72_fk_web_page_signature_id FOREIGN KEY (signature_id) REFERENCES public.web_page_signature(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: web_page_signature web_page_signature_user_id_90813285_fk_about_use; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.web_page_signature
+    ADD CONSTRAINT web_page_signature_user_id_90813285_fk_about_use FOREIGN KEY (user_id) REFERENCES public.about_user_userprofile(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- PostgreSQL database dump complete
+--
+
