@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Reply Email{% endblock title %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="send reply" name="reply">
+</form>
+<form action="" method="post" style="color: #6f94c6">
+    <p style="color: darkslategrey">info of email replied:</p>info of email replied:
+    <div style="color: darkslateblue"> subject: {{ replied_email.subject }}</div>
+    <div style="color: darkslateblue">text: {{ replied_email.text }}</div>
+    <div style="color: darkslateblue">sender: {{ replied_email.sender }}</div>
+    <div style="color: red">reply: {{ replied_email.is_reply }}</div>
+</form>
+
+{% endblock content %}

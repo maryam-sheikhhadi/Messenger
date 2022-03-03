@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Draft{% endblock title %}
+
+{% block content %}
+
+    {% for email in draft %}
+        <li>{{ email }}</li>
+    {% endfor %}
+
+{% endblock %}

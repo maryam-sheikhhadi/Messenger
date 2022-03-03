@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Lable List{% endblock title %}
+
+{% block content %}
+    <form action="" method="post">
+    {% csrf_token %}
+    {% for label in object_list %}
+        <div><a href="/mail/labels/{{ label.slug }}">{{ label }}</a></div>
+    {% endfor %}
+    </form>
+{% endblock %}
