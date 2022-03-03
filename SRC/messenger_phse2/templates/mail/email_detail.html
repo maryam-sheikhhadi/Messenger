@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Email Detail{% endblock title %}
+
+{% block content %}
+    <p>receiver as bcc receiver:</p>
+    {% for receiver in object.bcc.all %}
+        {% if user.get_username == receiver.username %}
+            <p style="color: red">
+                {{ receiver.username }}
+            </p>
+        {% endif %}
+    {% endfor %}
+
+
+    <p>receiver as to receiver:</p>
+    {% for receiver in object.receivers.all %}
+        <p style="color: green">
+            {{ receiver.username }}
+        </p>
+    {% endfor %}
+
+    <p>receiver as cc receiver:</p>
+    {% for receiver in object.cc.all %}
+        <p style="color: yellowgreen">
+            {{ receiver.username }}
+        </p>
+    {% endfor %}
+
+
+    <div>sender: {{ object.sender }}</div>
+
+    <div>trash: {{ object.is_trash }}</div>
+
+    <div>draft: {{ object.is_draft }}</div>
+
+    <div>archive: {{ object.is_archive }}</div>
+
+    <div>subject: {{ object.subject }}</div>
+
+    <div>text: {{ object.text }}</div>
+
+    {#<div>file: {{ object.file }}</div>#}
+    <p style="color: #0f6674">Files</p>
+    {% if object.file %}
+        <a href="/media/{{ object.file }}">{{ object.file }}</a>
+    {% endif %}
+
+    <div>signature: {{ object.signature }}</div>
+
+    <p>labels:</p>
+    {% for label in object.label.values %}
+        <p style="color: darkmagenta">
+            {{ label.title }}
+        </p>
+    {% endfor %}
+
+
+    {% if object.email_object %}
+        <div style="color: #062c33">this is email that replied or forwarded</div>
+        <div style="color: #6f94c6">{{ object.email_object.text }}</div>
+        <div style="color: #6f94c6">{{ object.email_object.subject }}</div>
+    {% endif %}
+
+    <br>
+
+    <div>
+        <button style="background: red; color: white; padding: 5px;"><i class="fa fa-trash"></i>
+            <a href="{% url 'delete-email' email.pk %}" style="color: white">Delete</a>
+        </button>
+    </div>
+
+    <br>
+
+    <div>
+        <button class="btn_blue flw_pic" style="background: royalblue; color: white; padding: 5px;"><i
+                class="fa fa-edit"></i><a href="{% url 'edit_email' email.pk %} " style="color: white">Edit
+        </a></button>
+    </div>
+
+    <br>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="submit" value="delete">
+
+    </form>
+
+    <div>
+        <a href="{% url 'forward-email' email.pk %}">
+            <svg style="margin: 2rem; color: goldenrod; width: 50px; height: 50px;" xmlns="http://www.w3.org/2000/svg"
+                 width="16" height="16" fill="currentColor" class="bi bi-forward-fill" viewBox="0 0 16 16">
+                <path d="m9.77 12.11 4.012-2.953a.647.647 0 0 0 0-1.114L9.771 5.09a.644.644 0 0 0-.971.557V6.65H2v3.9h6.8v1.003c0 .505.545.808.97.557z"/>
+            </svg>
+        </a>
+
+        <a href="{% url 'reply-email' email.pk %}">
+            <svg style="margin: 2rem; color: goldenrod; width: 50px; height: 50px;" xmlns="http://www.w3.org/2000/svg"
+                 width="16" height="16" fill="currentColor" class="bi bi-reply-fill" viewBox="0 0 16 16">
+                <path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"/>
+            </svg>
+        </a>
+    </div>
+{% endblock content %}
