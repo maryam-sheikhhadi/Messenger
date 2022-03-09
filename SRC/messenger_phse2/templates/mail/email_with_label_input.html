@@ -5,8 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-{% for r in result %}
-    <li>{{ r }}</li>
+{% for email in result %}
+    <a href="/mail/mail-detail/{{ email.pk }}"><li>{{ email }}</li></a>
 {% endfor %}
 </body>
 </html>

@@ -5,7 +5,7 @@
 {% block content %}
     <form action="" method="post">
     {% csrf_token %}
-    {% for label in object_list %}
+    {% for label in labels %}
         <div><a href="/mail/labels/{{ label.slug }}">{{ label }}</a></div>
     {% endfor %}
     </form>

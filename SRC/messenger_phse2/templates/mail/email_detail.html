@@ -56,8 +56,13 @@
 
     {% if object.email_object %}
         <div style="color: #062c33">this is email that replied or forwarded</div>
-        <div style="color: #6f94c6">{{ object.email_object.text }}</div>
-        <div style="color: #6f94c6">{{ object.email_object.subject }}</div>
+        <div style="color: #6f94c6">text:{{ object.email_object.text }}</div>
+        <div style="color: #6f94c6">subject:{{ object.email_object.subject }}</div>
+        <div style="color: #6f94c6">sender:{{ object.email_object.sender }}</div>
+        <div style="color: #6f94c6">receivers:{{ object.email_object.receivers }}</div>
+        <div style="color: #6f94c6">bcc:{{ object.email_object.bcc}}</div>
+        <div style="color: #6f94c6">cc:{{ object.email_object.cc }}</div>
+        <div style="color: #6f94c6"><a href="/mail/mail-detail/{{ object.email_object.pk }}">link:{{ object.email_object.subject }}</a></div>
     {% endif %}
 
     <br>
