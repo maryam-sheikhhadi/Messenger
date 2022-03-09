@@ -5,7 +5,7 @@
 {% block content %}
 
     {% for email in sent_box %}
-        <li>{{ email }}</li>
+        <li><a href="/mail/mail-detail/{{ email.pk }}">{{ email }}</a></li>
     {% endfor %}
 
 {% endblock %}

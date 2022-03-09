@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.views import LoginView
+from django.contrib.auth import logout
 from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes
@@ -83,3 +84,10 @@ def profile(request):
 
 def home(request):
     return render(request, "registration/profile.html", {})
+
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('/login/')
+    elif request.method == 'GET':
+        return render(request, "registration/logout.html")

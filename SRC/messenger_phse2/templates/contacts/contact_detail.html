@@ -169,7 +169,27 @@
                             </div>
                         </div>
 
+<div>
+<button style="background: red; color: white; padding: 5px;"><i class="fa fa-trash"></i>
+<a href="{% url 'delete_contact' contact.pk %}" style="color: white">Delete</a>
+</button>
+</div>
+
+<br>
+
+<div>
+<button class="btn_blue flw_pic" style="background: royalblue; color: white; padding: 5px;"><i
+class="fa fa-edit"></i><a href="{% url 'edite_contact' contact.pk %} " style="color: white">Edit
+</a></button>
+</div>
+
+<br>
                     </form>
+{#<form action="" method="post">#}
+{#    {% csrf_token %}#}
+{#    <input type="submit" value="delete">#}
+{##}
+{#</form>#}
                 </div>
             </div>
         </div>
@@ -177,3 +197,5 @@
 </div>
 </body>
 </html>
+
+

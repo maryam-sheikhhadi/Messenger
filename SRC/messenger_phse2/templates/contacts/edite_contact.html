@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{#{% load static %}#}
+{% block title %}Update Contact{% endblock title %}
+{% block content %}
+<form method="post">{% csrf_token %}
+    <div class="container flw_pic">
+
+            <label><b>first name</b></label><br>
+            {{ form.first_name}}<br>
+            <label><b>last name</b></label><br>
+            {{ form.last_name }}<br>
+            <label><b>email</b></label><br>
+            {{ form.email}}<br>
+            <label><b>birth date</b></label><br>
+            {{ form.birth_date}}<br>
+            <label><b>phone number</b></label><br>
+            {{ form.phone_number}}<br>
+            <label><b>other email</b></label><br>
+            {{ form.other_emails}}<br>
+            <button type="submit" class="btn_blue">Update</button>
+
+
+        </div>
+</form>
+{% endblock content %}

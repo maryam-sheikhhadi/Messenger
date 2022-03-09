@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from accounts.views import Register, ActivateAccount
+from accounts.views import Register, ActivateAccount, logout_view
 from mail.views import EmailList
 from django.contrib.auth.views import LoginView
 
@@ -28,6 +28,8 @@ urlpatterns = [
                   path('contacts/', include('contacts.urls')),
                   path('', EmailList.as_view(), name="all-mails"),
                   path('login/', LoginView.as_view(), name='login'),
+                  path('logout/', logout_view, name="logout"),
                   path('signup/', Register.as_view(), name='register'),
                   path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),
+                path('', include('django.contrib.auth.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

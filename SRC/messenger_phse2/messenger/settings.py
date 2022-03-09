@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'mail',
     'contacts',
-    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -152,8 +151,9 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "messenger.django.project@gmail.com"
-EMAIL_HOST_PASSWORD = "hnmmfvhuwmooewak"
+# EMAIL_HOST_USER = "this.is.from.messenger@gmail.com"
+EMAIL_HOST_USER = "maryam.sheikhhadi.01@gmail.com"
+EMAIL_HOST_PASSWORD = 'ucnckpuxemwdnqto'
 
 
 AUTH_USER_MODEL = 'accounts.User'

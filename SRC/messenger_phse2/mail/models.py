@@ -7,6 +7,7 @@ from django.utils.text import slugify
 class Label(models.Model):
     title = models.CharField(max_length=100, null=False)
     slug = models.SlugField(max_length=100, unique=True, null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:

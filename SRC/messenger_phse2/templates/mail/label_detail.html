@@ -5,7 +5,7 @@
 {% block content %}
     {% csrf_token %}
     <div style="color: pink">title:{{ object.title }}</div>
-    <div style="color: pink">slug: {{ object.slug }}</div>
+    <div style="color: pink">owner: {{ object.owner }}</div>
      <br>
     <div>
         <button style="background: red; color: white; padding: 5px;"><i class="fa fa-trash"></i>

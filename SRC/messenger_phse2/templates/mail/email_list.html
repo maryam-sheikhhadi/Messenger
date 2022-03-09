@@ -155,13 +155,6 @@
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" name="search_label" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-</nav>
-<br>
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="container">
@@ -259,6 +252,32 @@
                                     <li><a href="#fakelink">Dropdown link</a></li>
                                 </ul>
                             </div>
+                            <div>
+                    <a href="/contacts/all-contacts">
+                        <svg style="margin-left: 260px;margin-top: 10px ;width: 25px; height: 25px; color: #1e7e34"
+                             xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-person-lines-fill" viewBox="0 0 16 16">
+                            <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5zm.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1h-4zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1h-2z"/>
+                        </svg>
+                    </a>
+                    <a href="/contacts/create-contact">
+                        <svg style="margin-left: 10px;margin-top: 10px ;width: 25px; height: 25px; color: #1e7e34"
+                             xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+                            <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+                            <path fill-rule="evenodd"
+                                  d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
+                        </svg>
+                    </a>
+                    <a href="/logout/">
+                      <svg style="margin-left: 30px;margin-top: 10px ;width: 25px; height: 25px; color: #1e7e34"
+                            xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-door-closed" viewBox="0 0 16 16">
+                        <path d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2zm1 13h8V2H4v13z"/>
+                        <path d="M9 9a1 1 0 1 0 2 0 1 1 0 0 0-2 0z"/>
+                    </svg>
+                    </a>
+                </div>
                         </div>
                     </div>
 
@@ -267,7 +286,7 @@
 
                 <div class="panel panel-default m-t-20">
                     <div class="panel-body">
-                        {% for email in object_list %}
+                        {% for email in emails %}
                             <table class="table table-hover mails">
                             <tbody>
                             <tr class="active">

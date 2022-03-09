@@ -6,6 +6,7 @@ from django.views.generic import ListView, DetailView, DeleteView, UpdateView
 from accounts.models import User
 from .forms import EmailModelForm, ReplyEmailForm, LabelModelForm
 from .models import Email, Label
+from django.db.models import Q
 
 """
     email views: create, forward, reply, delete, update, list and detail
@@ -17,7 +18,7 @@ class CreateEmail(LoginRequiredMixin, View):
         form = EmailModelForm()
         contacts_list = User.objects.get(id=request.user.id).contacts_of_user.all().values_list('email', flat=True)
         contacts_list = list(contacts_list)
-        label_list = Label.objects.all().values_list('title', flat=True)
+        label_list = Label.objects.all().filter(owner=request.user.id).values_list('title', flat=True)
         label_list = list(label_list)
         return render(request, 'mail/create_email.html', {"form": form,
                                                           'contacts_list': contacts_list,
@@ -29,6 +30,26 @@ class CreateEmail(LoginRequiredMixin, View):
         cc = request.POST['cc']
         bcc = request.POST['bcc']
         label = request.POST['label']
+        cc_list = cc.split(',')
+        bcc_list = bcc.split(',')
+        to_list = receivers.split(',')
+        labels_list = label.split(',')
+
+
+        users = User.objects.all().values_list('username', flat=True)
+        users_list = [i for i in users]
+        labels_of_user = Label.objects.all().filter(owner=request.user)
+        labels_of_user_list = [i for i in labels_of_user]
+
+        to_list = [i for i in to_list if i in users_list]
+        cc_list = [i for i in cc_list if i in users_list]
+        bcc_list = [i for i in bcc_list if i in users_list]
+        labels_list = [i for i in labels_list if i in labels_of_user_list]
+
+        list_id_to = [User.objects.get(username=i).id for i in to_list]
+        list_id_cc = [User.objects.get(username=i).id for i in cc_list]
+        list_id_bcc = [User.objects.get(username=i).id for i in bcc_list]
+        list_id_label = [Label.objects.get(title=i).id for i in labels_list]
 
         if form.is_valid():
             email_obj = Email(subject=form.cleaned_data['subject'],
@@ -41,20 +62,34 @@ class CreateEmail(LoginRequiredMixin, View):
                               sender=User.objects.get(id=request.user.id)
                               )
             email_obj.save()
-            to_pk = User.objects.get(username=receivers).id
-            cc_pk = User.objects.get(username=cc).id
-            bcc_pk = User.objects.get(username=bcc).id
-            label_pk = Label.objects.get(title=label).id
-            email_obj.receivers.add(to_pk)
-            email_obj.cc.add(cc_pk)
-            email_obj.bcc.add(bcc_pk)
-            email_obj.label.add(label_pk)
-            return HttpResponse(f"'saved',{form.errors}")
-        return HttpResponse(f"'not saved', {form.errors}")
+            if 'draft' in request.POST:
+                email_obj.is_draft=True
+                email_obj.save()
+                return redirect('/mail/draft')
+            else:
+                email_obj.label.add(*list_id_label)
+                email_obj.cc.add(*list_id_cc)
+                email_obj.receivers.add(*list_id_to)
+                email_obj.bcc.add(*list_id_bcc)
+
+                return HttpResponse(f"'saved',{form.errors}")
+            return HttpResponse(f"'not saved', {form.errors}")
 
 
-class EmailList(LoginRequiredMixin, ListView):
-    model = Email
+# class EmailList(LoginRequiredMixin, ListView):
+#     model = Email
+#
+#     def get_queryset(self):
+
+
+class EmailList(LoginRequiredMixin, View):
+
+    def get(self, request):
+        emails = Email.objects.all().filter(
+            Q(sender=request.user.id) | Q(receivers=request.user.id)
+            | Q(cc=request.user.id) | Q(bcc=request.user.id)).distinct()
+
+        return render(request, 'mail/email_list.html', {'emails': emails})
 
 
 class EmailDetail(LoginRequiredMixin, DetailView):
@@ -94,6 +129,11 @@ class ForwardEmail(LoginRequiredMixin, View):
         contacts_list = User.objects.get(id=request.user.id).contacts_of_user.all().values_list('email', flat=True)
         return render(request, 'mail/forward_email.html', {'contacts_list': list(contacts_list)})
 
+class SendDraft(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        contacts_list = User.objects.get(id=request.user.id).contacts_of_user.all().values_list('email', flat=True)
+        return render(request, 'mail/send_draft.html', {'contacts_list': list(contacts_list)})
+
     def post(self, request, pk):
         forwarder = request.user
         email = Email.objects.get(id=pk)
@@ -120,14 +160,24 @@ class UpdateEmail(LoginRequiredMixin, UpdateView):
     success_url = '/'
 
 
+
 class DeleteEmail(LoginRequiredMixin, DeleteView):
     model = Email
     success_url = '/'
 
 
+
+
+
 """
     label views: create, delete, search, list and detail
 """
+
+class AddLabel(UpdateView):
+    model = Email
+    template_name = 'mail/add_label_to_email.html'
+    fields = ['label',]
+    success_url = '/'
 
 
 class CreateLabel(LoginRequiredMixin, View):
@@ -139,13 +189,16 @@ class CreateLabel(LoginRequiredMixin, View):
     def post(self, request):
         form = LabelModelForm(request.POST)
         if form.is_valid():
-            label_obj = Label(title=form.cleaned_data['title'], )
+            label_obj = Label(title=form.cleaned_data['title'],
+                              owner= User.objects.get(id=request.user.id))
             label_obj.save()
             return HttpResponse('this label created')
 
 
-class LabelList(LoginRequiredMixin, ListView):
-    model = Label
+class LabelList(LoginRequiredMixin, View):
+    def get(self, request):
+        labels = Label.objects.all().filter(owner=request.user.id)
+        return render(request, 'mail/label_list.html', {'labels': labels})
 
 
 class LabelDetail(LoginRequiredMixin, DetailView):
@@ -160,14 +213,13 @@ class DeleteLabel(LoginRequiredMixin, DeleteView):
 class SearchByLable(LoginRequiredMixin, View):
 
     def get(self, request):
-        label_list = Label.objects.all().values_list('title', flat=True)
+        label_list = Label.objects.all().filter(owner=request.user.id).values_list('title', flat=True)
         return render(request, 'mail/search_box.html', {'label_list': list(label_list)})
 
     def post(self, request):
         search_label = request.POST['search_label']
-        label_list = Label.objects.all().values_list('title', flat=True)
 
-        result = Email.objects.all().filter(label__title__startswith=search_label).values_list('subject', flat=True)
+        result = Email.objects.all().filter(Q(label__title__startswith=search_label) & Q(owner=request.user)).values_list('subject', flat=True)
         return render(request, 'mail/email_with_label_input.html', {'result': result})
 
 
@@ -178,38 +230,58 @@ class SearchByLable(LoginRequiredMixin, View):
 
 class SentBox(LoginRequiredMixin, View):
     def get(self, request):
-        sent_box = Email.objects.filter(sender=request.user.id)
+        sent_box = Email.objects.filter(sender=request.user.id).distinct()
         return render(request, 'mail/sent_box.html', {'sent_box': sent_box})
 
 
 class Inbox(LoginRequiredMixin, View):
     def get(self, request):
-        inbox = Email.objects.filter(receivers=request.user.id)
-        inbox_bcc = Email.objects.filter(bcc=request.user.id)
-        inbox_cc = Email.objects.filter(cc=request.user.id)
-        return render(request, 'mail/inbox.html', {'inbox': inbox,
-                                                   'inbox_bcc': inbox_bcc,
-                                                   'inbox_cc': inbox_cc})
+        emails_to = Email.objects.filter(receivers=request.user.id).distinct()
+        emails_cc = Email.objects.filter(cc=request.user.id).distinct()
+        emails_bcc = Email.objects.filter(bcc=request.user.id).distinct()
+        return render(request, 'mail/inbox.html', {'emails_to': emails_to,
+                                                       'emails_cc': emails_cc,
+                                                       'emails_bcc': emails_bcc})
 
 
 class Draft(LoginRequiredMixin, View):
+
     def get(self, request):
-        draft = Email.objects.filter(is_draft=True)
+        draft = Email.objects.filter((Q(is_draft=True) & Q(sender=request.user.id)) |
+                                              (Q(is_draft=True) & Q(bcc=request.user.id)) |
+                                              (Q(is_draft=True) & Q(cc=request.user.id)) |
+                                              (Q(is_draft=True) & Q(receivers=request.user.id)))
+        draft = draft.distinct()
+
         return render(request, 'mail/draft.html', {'draft': draft})
 
 
 class Archive(LoginRequiredMixin, View):
+
     def get(self, request):
-        draft = Email.objects.filter(is_archive=True)
-        return render(request, 'mail/archive.html', {'draft': draft})
+        archive = Email.objects.filter((Q(is_archive=True) & Q(sender=request.user.id)) |
+                                               (Q(is_archive=True) & Q(bcc=request.user.id)) |
+                                               (Q(is_archive=True) & Q(cc=request.user.id)) |
+                                               (Q(is_archive=True) & Q(receivers=request.user.id)))
+        archive = archive.distinct()
+
+        return render(request, 'mail/archive.html', {'archive': archive})
 
 
 class Trash(LoginRequiredMixin, View):
+
     def get(self, request):
-        trash = Email.objects.filter(is_trash=True)
+        trash = Email.objects.filter((Q(is_trash=True) & Q(sender=request.user.id)) |
+                                              (Q(is_trash=True) & Q(receivers=request.user.id)) |
+                                              (Q(is_trash=True) & Q(cc=request.user.id)) |
+                                              (Q(is_trash=True) & Q(bcc=request.user.id)))
+        trash = trash.distinct()
+
         return render(request, 'mail/trash.html', {'trash': trash})
+
 
 
 """
     آخیش🥱
 """
+
