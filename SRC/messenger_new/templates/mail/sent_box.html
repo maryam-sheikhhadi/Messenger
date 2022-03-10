@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Sent Box{% endblock title %}
+
+{% block content %}
+
+    {% for email in sent_box %}
+        <li><a href="/mail/mail-detail/{{ email.pk }}">{{ email }}</a></li>
+    {% endfor %}
+
+{% endblock %}

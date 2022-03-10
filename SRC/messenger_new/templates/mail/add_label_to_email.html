@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{#{% load static %}#}
+{% block title %}Update Email{% endblock title %}
+{% block content %}
+<form method="post">{% csrf_token %}
+    <div class="container flw_pic">
+            <label><b>Label</b></label>
+{#        <br>#}
+{#            {{ form.as_p}}#}
+{#        <br>#}
+        {{ query }}
+        <select name="selected_label" multiple>
+            {% for q in query %}
+            <option>{{ q }}</option>
+            {% endfor %}
+        </select>
+
+            <button type="submit" class="btn_blue">Add label</button>
+
+
+        </div>
+</form>
+{% endblock content %}

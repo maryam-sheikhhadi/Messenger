@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}email comfirm delete{% endblock title %}
+
+{% block content %}
+
+    <form method="post" class="flw_pic">
+        {% csrf_token %}
+        <p>Are you sure you want to delete "{{ object }}"?</p>
+
+        <button class="btn_blue" type="submit">Confirm</button>
+
+        <button class="btn_blue"><a style="color: black" href="{% url 'mail-detail' email.pk %}">Refuse</a></button>
+    </form>
+
+{% endblock %}
