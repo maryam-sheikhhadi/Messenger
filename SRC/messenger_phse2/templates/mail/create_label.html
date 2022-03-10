@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Label{% endblock title %}
+
+{% block content %}
+    <form action="" method="post">
+    {% csrf_token %}
+    <tabel>
+        <td>
+             {{ form.as_table }}
+            <input type="submit" value="make label">
+        </td>
+    </tabel>
+    </form>
+{% endblock %}

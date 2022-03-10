@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Inbox{% endblock title %}
+
+{% block content %}
+
+    <h>inbox receiver as to</h>
+    {% for email in emails_to %}
+        <li><a href="/mail/mail-detail/{{ email.pk }}">{{ email }}</a></li>
+    {% endfor %}
+
+    <h>inbox receiver as cc</h>
+    {% for email in emails_cc %}
+        <li><a href="/mail/mail-detail/{{ email.pk }}">{{ email }}</a></li>
+    {% endfor %}
+
+    <h>inbox receiver as bcc</h>
+    {% for email in emails_bcc %}
+        <li><a href="/mail/mail-detail/{{ email.pk }}">{{ email }}</a></li>
+    {% endfor %}
+{% endblock %}
