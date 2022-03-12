@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Signature Detail{% endblock title %}
+
+{% block content %}
+
+    {{ object.text }}<br>
+    {{ object.user.username }}<br>
+    {{ object.pk }}
+
+{% endblock content %}

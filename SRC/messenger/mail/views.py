@@ -2,10 +2,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic import ListView, DetailView, DeleteView, UpdateView
+from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from accounts.models import User
-from .forms import EmailModelForm, ReplyEmailForm, LabelModelForm
-from .models import Email, Label
+from .forms import EmailModelForm, ReplyEmailForm, LabelModelForm, SignatureModelForm
+from .models import Email, Label, Signature
 from django.db.models import Q
 
 """
@@ -20,9 +20,12 @@ class CreateEmail(LoginRequiredMixin, View):
         contacts_list = list(contacts_list)
         label_list = Label.objects.all().filter(owner=request.user.id).values_list('title', flat=True).distinct()
         label_list = list(label_list)
+        signature_list = Signature.objects.filter(user=request.user).values_list('text', flat=True)
         return render(request, 'mail/create_email.html', {"form": form,
                                                           'contacts_list': contacts_list,
-                                                          'label_list': label_list})
+                                                          'label_list': label_list,
+                                                          'signature_list': list(signature_list)
+                                                          })
 
     def post(self, request):
         form = EmailModelForm(request.POST, request.FILES)
@@ -30,11 +33,11 @@ class CreateEmail(LoginRequiredMixin, View):
         cc = request.POST['cc']
         bcc = request.POST['bcc']
         label = request.POST['label']
+        signature = request.POST['selected_singature']
         cc_list = cc.split(',')
         bcc_list = bcc.split(',')
         to_list = receivers.split(',')
         labels_list = label.split(',')
-
 
         users = User.objects.all().values_list('username', flat=True)
         users_list = [i for i in users]
@@ -57,14 +60,14 @@ class CreateEmail(LoginRequiredMixin, View):
                               is_draft=form.cleaned_data['is_draft'],
                               is_trash=form.cleaned_data['is_trash'],
                               is_archive=form.cleaned_data['is_archive'],
-                              signature=form.cleaned_data['signature'],
+                              signature=Signature.objects.get(text=signature),
                               file=form.cleaned_data['file'],
                               sender=User.objects.get(id=request.user.id)
                               )
             email_obj.save()
             if 'draft' in request.POST:
                 email_obj.label.add(*list_id_label)
-                email_obj.is_draft=True
+                email_obj.is_draft = True
                 email_obj.save()
                 return redirect('/mail/draft')
             else:
@@ -157,7 +160,6 @@ class ForwardEmail(LoginRequiredMixin, View):
         return redirect(f'/mail/mail-detail/{pk}')
 
 
-
 class SendDraft(LoginRequiredMixin, View):
     def get(self, request, pk):
         contacts_list = User.objects.get(id=request.user.id).contacts_of_user.all().values_list('email', flat=True)
@@ -203,24 +205,21 @@ class UpdateEmail(LoginRequiredMixin, UpdateView):
     success_url = '/'
 
 
-
 class DeleteEmail(LoginRequiredMixin, DeleteView):
     model = Email
     success_url = '/'
-
-
-
 
 
 """
     label views: create, delete, search, list and detail
 """
 
+
 class AddLabel(View):
 
-    def get(self, request,pk):
+    def get(self, request, pk):
         query = Label.objects.filter(owner=request.user).values_list('title', flat=True)
-        return render(request,'mail/add_label_to_email.html', {'query':list(query)})
+        return render(request, 'mail/add_label_to_email.html', {'query': list(query)})
 
     def post(self, request, pk):
         print(request.POST)
@@ -229,7 +228,6 @@ class AddLabel(View):
         label_id = [Label.objects.get(title=i) for i in label]
         email.label.add(*label_id)
         return HttpResponse('okay!')
-
 
 
 class CreateLabel(LoginRequiredMixin, View):
@@ -296,17 +294,17 @@ class Inbox(LoginRequiredMixin, View):
         emails_cc = Email.objects.filter(cc=request.user.id).distinct()
         emails_bcc = Email.objects.filter(bcc=request.user.id).distinct()
         return render(request, 'mail/inbox.html', {'emails_to': emails_to,
-                                                       'emails_cc': emails_cc,
-                                                       'emails_bcc': emails_bcc})
+                                                   'emails_cc': emails_cc,
+                                                   'emails_bcc': emails_bcc})
 
 
 class Draft(LoginRequiredMixin, View):
 
     def get(self, request):
         draft = Email.objects.filter((Q(is_draft=True) & Q(sender=request.user.id)) |
-                                              (Q(is_draft=True) & Q(bcc=request.user.id)) |
-                                              (Q(is_draft=True) & Q(cc=request.user.id)) |
-                                              (Q(is_draft=True) & Q(receivers=request.user.id)))
+                                     (Q(is_draft=True) & Q(bcc=request.user.id)) |
+                                     (Q(is_draft=True) & Q(cc=request.user.id)) |
+                                     (Q(is_draft=True) & Q(receivers=request.user.id)))
         draft = draft.distinct()
 
         return render(request, 'mail/draft.html', {'draft': draft})
@@ -316,9 +314,9 @@ class Archive(LoginRequiredMixin, View):
 
     def get(self, request):
         archive = Email.objects.filter((Q(is_archive=True) & Q(sender=request.user.id)) |
-                                               (Q(is_archive=True) & Q(bcc=request.user.id)) |
-                                               (Q(is_archive=True) & Q(cc=request.user.id)) |
-                                               (Q(is_archive=True) & Q(receivers=request.user.id)))
+                                       (Q(is_archive=True) & Q(bcc=request.user.id)) |
+                                       (Q(is_archive=True) & Q(cc=request.user.id)) |
+                                       (Q(is_archive=True) & Q(receivers=request.user.id)))
         archive = archive.distinct()
 
         return render(request, 'mail/archive.html', {'archive': archive})
@@ -328,16 +326,43 @@ class Trash(LoginRequiredMixin, View):
 
     def get(self, request):
         trash = Email.objects.filter((Q(is_trash=True) & Q(sender=request.user.id)) |
-                                              (Q(is_trash=True) & Q(receivers=request.user.id)) |
-                                              (Q(is_trash=True) & Q(cc=request.user.id)) |
-                                              (Q(is_trash=True) & Q(bcc=request.user.id)))
+                                     (Q(is_trash=True) & Q(receivers=request.user.id)) |
+                                     (Q(is_trash=True) & Q(cc=request.user.id)) |
+                                     (Q(is_trash=True) & Q(bcc=request.user.id)))
         trash = trash.distinct()
 
         return render(request, 'mail/trash.html', {'trash': trash})
-
 
 
 """
     آخیش🥱
 """
 
+"""
+signature
+"""
+
+
+class CreateSignature(LoginRequiredMixin, View):
+
+    def get(self, request):
+        form = SignatureModelForm()
+        return render(request, 'mail/signature_form.html', {"form": form})
+
+    def post(self, request):
+        form = SignatureModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            signature_obj = Signature(text=form.cleaned_data['text'],
+                                      user=request.user)
+            signature_obj.save()
+            return HttpResponse('this signature created')
+
+
+class SignatureList(LoginRequiredMixin, View):
+    def get(self, request):
+        signatures = Signature.objects.all().filter(user=request.user)
+        return render(request, 'mail/signature_list.html', {'signatures': signatures})
+
+
+class SignatureDetail(LoginRequiredMixin, DetailView):
+    model = Signature

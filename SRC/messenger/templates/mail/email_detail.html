@@ -46,7 +46,7 @@
         <a href="/media/{{ object.file }}">{{ object.file }}</a>
     {% endif %}
 
-    <div>signature: {{ object.signature }}</div>
+    <div>signature:<a href="{% url 'signature-detail' object.signature.pk %}">{{ object.signature }}</a> </div>
 
     <p>labels:</p>
     {% for label in object.label.values %}

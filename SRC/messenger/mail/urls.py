@@ -25,4 +25,8 @@ urlpatterns = [
     path('draft', Draft.as_view(), name='draft'),
     path('archive', Archive.as_view(), name='archive'),
     path('trash', Trash.as_view(), name='trash'),
+    #signature
+    path('create-signature', CreateSignature.as_view(), name='create-signature'),
+    path('signature-detail/<int:pk>', SignatureDetail.as_view(), name='signature-detail'),
+    path('signatures', SignatureList.as_view(), name='signatures'),
 ]

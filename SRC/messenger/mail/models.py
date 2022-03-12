@@ -23,6 +23,9 @@ class Signature(models.Model):
     text = models.CharField(max_length=100, null=False)
     stamp = models.ImageField(upload_to='media/signature', null=True, blank=True)
 
+    def __str__(self):
+        return self.text
+
 
 class Email(models.Model):
     sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='sent_emails', blank=True)

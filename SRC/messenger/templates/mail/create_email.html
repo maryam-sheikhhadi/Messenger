@@ -130,7 +130,13 @@
     <br>
 
     <div class="autocomplete" style="width:300px;">
-        signature: {{ form.signature }}
+{#        signature: {{ form.signature }}#}
+        signature:<br>
+        <select name="selected_singature">
+            {% for s in signature_list %}
+            <option>{{ s }}</option>
+            {% endfor %}
+        </select>
     </div>
 
     <br>
