@@ -3,7 +3,9 @@
 {% block title %}Signature List{% endblock title %}
 
 {% block content %}
+
     {% for signature in signatures %}
         <div><a href="/mail/signature-detail/{{ signature.pk }}">{{ signature.text }}</a></div>
     {% endfor %}
+
 {% endblock %}

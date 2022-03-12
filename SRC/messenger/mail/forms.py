@@ -24,14 +24,3 @@ class SignatureModelForm(forms.ModelForm):
     class Meta:
         model = Signature
         fields = ('text',)
-#
-#     def clean(self):
-#         cleaned_data = super().clean()
-#         text = cleaned_data.get('text')
-
-
-
-        # if email == None and phone == None:
-        #     raise forms.ValidationError('You must enter an email or phone number')
-        # else:
-        #     return cleaned_data

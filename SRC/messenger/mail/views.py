@@ -366,3 +366,5 @@ class SignatureList(LoginRequiredMixin, View):
 
 class SignatureDetail(LoginRequiredMixin, DetailView):
     model = Signature
+
+

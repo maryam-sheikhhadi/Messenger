@@ -5,6 +5,8 @@ from django.views.generic import ListView, DetailView, UpdateView, DeleteView
 from accounts.models import User
 from .forms import ContactModelForm
 from .models import Contact
+from django.http import HttpResponse
+import csv
 
 
 class CreateContact(LoginRequiredMixin, View):
@@ -50,3 +52,15 @@ class UpdateContact(LoginRequiredMixin, UpdateView):
 class DeleteContact(LoginRequiredMixin, DeleteView):
     model = Contact
     success_url = '/'
+
+
+def exportcsv(request):
+    contacts = Contact.objects.all().filter(user=request.user)
+    response = HttpResponse('')
+    response['Content-Disposition'] = 'attachment; filename=contacts.csv'
+    writer = csv.writer(response)
+    writer.writerow(['first_name', 'last_name', 'email', 'other_emails', 'phone_number', 'birth_date'])
+    contacts = contacts.values_list('first_name', 'last_name', 'email', 'other_emails', 'phone_number', 'birth_date')
+    for contact in contacts:
+        writer.writerow(contact)
+    return response
