@@ -1,6 +1,7 @@
 import itertools
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView
@@ -86,9 +87,9 @@ class SearchByFieldContact(LoginRequiredMixin, View):
         print(res)
         return render(request, 'contacts/search_fields_contact.html', {'res': res})
 
-    # def post(self, request):
-    #     search_fields_contacts = request.POST['search_label']
-    #
-    #     result = Contact.objects.all()
-    #
-    #     return render(request, 'mail/email_with_label_input.html', {'result': result})
+    def post(self, request):
+        contact = request.POST['search_field']
+        result = Contact.objects.all().filter(Q(user=request.user) & (
+                Q(first_name__startswith=contact) | Q(last_name__startswith=contact) |
+                Q(email__startswith=contact) | Q(other_emails__startswith=contact) | Q(phone_number__startswith=contact)))
+        return HttpResponse(result)

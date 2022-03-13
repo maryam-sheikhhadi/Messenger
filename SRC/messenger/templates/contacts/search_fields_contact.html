@@ -73,7 +73,7 @@
 
 {#                <input type="text" name="search_label">#}
         <div class="autocomplete" style="width:300px;">
-        label: <input id="search_label" type="text" name="search_label" placeholder="label">
+        label: <input id="search_field" type="text" name="search_field" placeholder="search field contact">
     </div>
                 <input type="submit" name="search" value="search">
     </form>
@@ -176,9 +176,9 @@
     }
 
     /*An array containing all the country names in the world:*/
-    var label_list = {{ res|safe }}
+    var contact_fields_list = {{ res|safe }}
         /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-    autocomplete(document.getElementById("search_label"), label_list);
+    autocomplete(document.getElementById("search_field"), contact_fields_list);
 </script>
 
 </body>
