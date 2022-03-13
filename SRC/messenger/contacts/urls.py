@@ -7,5 +7,6 @@ urlpatterns = [
     path('contact-detail/<int:pk>', ContactDetail.as_view(), name="contact-detail"),
     path('edite_contact/<int:pk>', UpdateContact.as_view(), name='edite_contact'),
     path('delete_contact/<int:pk>', DeleteContact.as_view(), name='delete_contact'),
-    path('contact-list-csv', exportcsv, name='contact-list-csv'),
+    path('contact-list-csv', export_csv_contacts_list, name='contact-list-csv'),
+    path('search_fields_contact', SearchByFieldContact.as_view(), name='search_fields_contact'),
 ]
