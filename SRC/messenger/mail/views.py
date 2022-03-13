@@ -1,3 +1,6 @@
+import itertools
+
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -7,6 +10,8 @@ from accounts.models import User
 from .forms import EmailModelForm, ReplyEmailForm, LabelModelForm, SignatureModelForm
 from .models import Email, Label, Signature
 from django.db.models import Q
+from django.http import JsonResponse
+import json
 
 """
     email views: create, forward, reply, delete, update, list and detail
@@ -208,6 +213,32 @@ class UpdateEmail(LoginRequiredMixin, UpdateView):
 class DeleteEmail(LoginRequiredMixin, DeleteView):
     model = Email
     success_url = '/'
+
+
+
+@login_required
+def search_content_email(req):
+    if req.method == 'POST':
+        text = req.POST.get('text')
+        if not text:
+            json_data = json.loads(req.body)
+            text = json_data['text']
+
+        email = Email.objects.filter(subject__contains=text)
+        email_list = email.values_list('subject', 'text')
+        email_lst = list(itertools.chain(*email_list))
+        emails = [i for i in email_lst if i]
+        if email:
+            return JsonResponse({
+                'emails': emails
+            })
+        else:
+            return JsonResponse({
+                'emails': [],
+                'msg': "doesn't match any emails",
+            })
+    else:
+        return render(req, 'mail/search_content_email_box.html', {})
 
 
 """

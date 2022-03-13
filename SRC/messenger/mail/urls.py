@@ -3,7 +3,7 @@ from .views import *
 
 
 urlpatterns = [
-    #email urls: create, list, detail, reply, forward, delete, edite
+    #email urls: create, list, detail, reply, forward, delete, edite, search with ajax
     path('create-email', CreateEmail.as_view(), name="create-email"),
     path('all-mails', EmailList.as_view(), name="all-mails"),
     path('mail-detail/<int:pk>', EmailDetail.as_view(), name="mail-detail"),
@@ -12,6 +12,7 @@ urlpatterns = [
     path('send-from-draft/<int:pk>', SendDraft.as_view(), name="send-from-draft"),
     path('delete-email/<int:pk>', DeleteEmail.as_view(), name='delete-email'),
     path('edit_email/<int:pk>', UpdateEmail.as_view(), name='edit_email'),
+    path('search_email/', search_content_email, name="search_email"),
     #label urls: create, list, detail with slug, delete, search
     path('create-label', CreateLabel.as_view(), name="create-label"),
     path('labels', LabelList.as_view(), name="labels"),

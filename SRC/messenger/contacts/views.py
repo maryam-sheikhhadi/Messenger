@@ -77,11 +77,6 @@ class SearchByFieldContact(LoginRequiredMixin, View):
         # c = Contact.objects.all().filter(user=request.user.id).values_list('birth_date', flat=True)
         # c2 = [i.strftime("%m/%d/%Y") for i in c if i]
         # print(c2)
-        # last_name_list = Contact.objects.all().filter(owner=request.user.id).values_list('last_name', flat=True)
-        # email_list = Contact.objects.all().filter(owner=request.user.id).values_list('email', flat=True)
-        # other_emails_list = Contact.objects.all().filter(owner=request.user.id).values_list('other_emails', flat=True)
-        # phone_number_list = Contact.objects.all().filter(owner=request.user.id).values_list('phone_number', flat=True)
-        # birth_date_list = Contact.objects.all().filter(owner=request.user.id).values_list('birth_date', flat=True)
         r = list(itertools.chain(*fields_contacts_list))
         res = [i for i in r if i]
         print(res)
@@ -92,4 +87,4 @@ class SearchByFieldContact(LoginRequiredMixin, View):
         result = Contact.objects.all().filter(Q(user=request.user) & (
                 Q(first_name__startswith=contact) | Q(last_name__startswith=contact) |
                 Q(email__startswith=contact) | Q(other_emails__startswith=contact) | Q(phone_number__startswith=contact)))
-        return HttpResponse(result)
+        return render(request, 'contacts/result_search_contact.html', {'result': result})
