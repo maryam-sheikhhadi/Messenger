@@ -3,9 +3,11 @@
 {% block title %}Email Detail{% endblock title %}
 
 {% block content %}
+
+
     <p>receiver as bcc receiver:</p>
     {% for receiver in object.bcc.all %}
-        {% if user.get_username == receiver.username %}
+        {% if user.get_username == receiver.username or user.get_username == object.sender.username %}
             <p style="color: red">
                 {{ receiver.username }}
             </p>
@@ -20,6 +22,7 @@
         </p>
     {% endfor %}
 
+
     <p>receiver as cc receiver:</p>
     {% for receiver in object.cc.all %}
         <p style="color: yellowgreen">
@@ -30,26 +33,25 @@
 
     <div>sender: {{ object.sender }}</div>
 
-    <div>trash: {{ object.is_trash }}</div>
-
-    <div>draft: {{ object.is_draft }}</div>
-
-    <div>archive: {{ object.is_archive }}</div>
 
     <div>subject: {{ object.subject }}</div>
 
     <div>text: {{ object.text }}</div>
 
-    {#<div>file: {{ object.file }}</div>#}
+
     <p style="color: #0f6674">Files</p>
     {% if object.file %}
         <a href="/media/{{ object.file }}">{{ object.file }}</a>
     {% endif %}
 
-    <div>signature:<a href="{% url 'signature-detail' object.signature.pk %}">{{ object.signature }}</a> </div>
+    signature:
+    {% if object.signature %}
+    <div><a href="{% url 'signature-detail' object.signature.pk %}">{{ object.signature }}</a> </div>
+{% endif %}
+
 
     <p>labels:</p>
-    {% for label in object.label.values %}
+    {% for label in labels %}
         <li><a href="/mail/labels/{{ label.slug }}">{{ label.title }}</a></li>
     {% endfor %}
 
@@ -73,13 +75,26 @@
         </button>
     </div>
 
+
     <br>
 
-    <div>
-        <button class="btn_blue flw_pic" style="background: royalblue; color: white; padding: 5px;"><i
-                class="fa fa-edit"></i><a href="{% url 'edit_email' email.pk %} " style="color: white">edite category
-        </a></button>
+
+     <div>
+     <button style="background: red; color: white; padding: 5px;"><i class="fa fa-trash"></i>
+                <a href="{% url 'check-trash' email.pk %} " style="color: white">trash</a>
+     </button>
     </div>
+
+
+        <br>
+
+
+     <div>
+        <button class="btn_blue flw_pic" style="background: royalblue; color: white; padding: 5px;">
+            <a href="{% url 'check-archive' email.pk %} " style="color: white">Archive</a>
+        </button>
+    </div>
+
 
     <br>
 
@@ -95,11 +110,22 @@
         </a></button>
 
     <br>
+
+    {% for i in places %}
+        {% if i.is_draft %}
+                    <button><a href="{% url 'send-from-draft' email.pk %}">send draft email</a></button>
+        {% endif %}
+    {% endfor %}
+
+
+
     <br>
 
-    {% if email.is_draft %}
-        <button><a href="{% url 'send-from-draft' email.pk %}">send draft email</a></button>
-    {% endif %}
+    <h style="color: #0f6674">filters</h>
+                                {% for filter in object.filter.values %}
+                                    <p style="color: darkolivegreen"><a
+                                            href="#">{{ filter.title }}</a></p>
+                                {% endfor %}
 
     <div>
         <a href="{% url 'forward-email' email.pk %}">

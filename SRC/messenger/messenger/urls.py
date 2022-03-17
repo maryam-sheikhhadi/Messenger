@@ -31,5 +31,8 @@ urlpatterns = [
                   path('logout/', logout_view, name="logout"),
                   path('signup/', Register.as_view(), name='register'),
                   path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),
-                path('', include('django.contrib.auth.urls')),
+                  path('', include('django.contrib.auth.urls')),
+
+
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

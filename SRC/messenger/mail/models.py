@@ -9,6 +9,7 @@ class Label(models.Model):
     slug = models.SlugField(max_length=100, unique=True, null=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
@@ -26,10 +27,14 @@ class Signature(models.Model):
     def __str__(self):
         return self.text
 
+class Filter(models.Model):
+    title = models.CharField(max_length=50)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+
 
 class Email(models.Model):
     sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='sent_emails', blank=True)
-    receivers = models.ManyToManyField(User, related_name='receivers')
+    receivers = models.ManyToManyField(User, related_name='receivers', null=False)
     cc = models.ManyToManyField(User, related_name='receivers_cc', null=True, blank=True)
     bcc = models.ManyToManyField(User, related_name='receivers_bcc', null=True, blank=True)
     subject = models.CharField(max_length=100, null=True, blank=True)
@@ -44,6 +49,18 @@ class Email(models.Model):
     is_draft = models.BooleanField(default=False)
     is_trash = models.BooleanField(default=False)
     slug = models.SlugField(max_length=100, unique=True, null=True, blank=True)
+    filter = models.ManyToManyField(Filter, related_name='filters', blank=True)
 
     def __str__(self):
         return self.text
+
+
+class EmailFolder(models.Model):
+    email = models.ForeignKey(Email, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_trash = models.BooleanField(default=False)
+    is_archive = models.BooleanField(default=False)
+    is_draft = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.is_draft}_{self.email}_{self.user}'

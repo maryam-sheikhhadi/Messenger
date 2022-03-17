@@ -11,8 +11,10 @@ urlpatterns = [
     path('forward-email/<int:pk>', ForwardEmail.as_view(), name="forward-email"),
     path('send-from-draft/<int:pk>', SendDraft.as_view(), name="send-from-draft"),
     path('delete-email/<int:pk>', DeleteEmail.as_view(), name='delete-email'),
-    path('edit_email/<int:pk>', UpdateEmail.as_view(), name='edit_email'),
     path('search_email/', search_content_email, name="search_email"),
+    path('filter-email/', FilterEmail.as_view(), name="filter-email"),
+    path('check-archive/<int:pk>', check_archive, name="check-archive"),
+    path('check-trash/<int:pk>', check_trash, name="check-trash"),
     #label urls: create, list, detail with slug, delete, search
     path('create-label', CreateLabel.as_view(), name="create-label"),
     path('labels', LabelList.as_view(), name="labels"),

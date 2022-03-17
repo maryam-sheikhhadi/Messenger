@@ -2,40 +2,4 @@
 {#{% load static %}#}
 {% block title %}Update Email{% endblock title %}
 {% block content %}
-<form method="post">{% csrf_token %}
-    <div class="container flw_pic">
-
-
-        {% if email.is_trash %}
-            <label><b>remove from Trash</b></label><br>
-            {{ form.is_trash}}<br>
-            {% else %}
-            <label><b>put in Trash</b></label><br>
-            {{ form.is_trash}}<br>
-        {% endif %}
-
-
-        {% if email.is_archive %}
-            <label><b>remove from Archive</b></label><br>
-            {{ form.is_archive }}<br>
-            {% else %}
-            <label><b>put in archive</b></label><br>
-            {{ form.is_archive }}<br>
-        {% endif %}
-
-
-        {% if email.is_draft %}
-            <label><b>remove from Draft</b></label><br>
-            {{ form.is_draft}}<br>
-            {% else %}
-            <label><b>put in draft</b></label><br>
-            {{ form.is_draft}}<br>
-        {% endif %}
-
-
-            <button type="submit" class="btn_blue">okay</button>
-
-
-        </div>
-</form>
 {% endblock content %}

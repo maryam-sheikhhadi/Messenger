@@ -73,17 +73,17 @@
 <form autocomplete="off" action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
-    <span style="color: red">
-        trash:{{ form.is_trash }}
-    </span>
-
-    <span style="color: yellowgreen">
-        draft:{{ form.is_draft }}
-    </span>
-
-    <span style="color: green">
-        archive:{{ form.is_archive }}
-    </span>
+{#    <span style="color: red">#}
+{#        trash:{{ form.is_trash }}#}
+{#    </span>#}
+{##}
+{#    <span style="color: yellowgreen">#}
+{#        draft:{{ form.is_draft }}#}
+{#    </span>#}
+{##}
+{#    <span style="color: green">#}
+{#        archive:{{ form.is_archive }}#}
+{#    </span>#}
 
     <br>
     <br>
@@ -99,10 +99,10 @@
     <div class="autocomplete" style="width:300px;">
         bcc: <input id="bcc" type="text" name="bcc" placeholder="bcc">
     </div>
-
-    <div class="autocomplete" style="width:300px;">
-        label: <input id="label" type="text" name="label" placeholder="label">
-    </div>
+{##}
+{#    <div class="autocomplete" style="width:300px;">#}
+{#        label: <input id="label" type="text" name="label" placeholder="label">#}
+{#    </div>#}
 
     <br>
     <br>
@@ -131,7 +131,9 @@
 
     <div class="autocomplete" style="width:300px;">
         signature:<br>
+
         <select name="selected_singature">
+        <option>None</option>
             {% for s in signature_list %}
             <option>{{ s }}</option>
             {% endfor %}

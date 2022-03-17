@@ -3,9 +3,10 @@
 {% block title %}Draft{% endblock title %}
 
 {% block content %}
-
+    {% if draft %}
     {% for email in draft %}
         <li><a href="/mail/mail-detail/{{ email.pk }}">{{ email }}</a></li>
     {% endfor %}
+    {% endif %}
 
 {% endblock %}

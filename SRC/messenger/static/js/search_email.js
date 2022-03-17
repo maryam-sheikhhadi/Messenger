@@ -16,7 +16,7 @@ $( document ).ready(function() {
                 'text':input_data
                 },
             success: function(res) {
-                console.log(res);
+                // console.log(res);
                 show_emails(res)
             }
         });
@@ -33,7 +33,7 @@ $( document ).ready(function() {
                   var linkText = document.createTextNode(value);
                   a.appendChild(linkText);
                   a.title = value;
-                  a.href = URL2;
+                  a.href =URL2;
                   li.append(a)
                     my_ul_tag.append(li)
               }
