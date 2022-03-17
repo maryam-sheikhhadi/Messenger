@@ -55,6 +55,11 @@
         <li><a href="/mail/labels/{{ label.slug }}">{{ label.title }}</a></li>
     {% endfor %}
 
+        <p>filters:</p>
+    {% for filter in filters %}
+        <li><a href="#">{{ filter.title }}</a></li>
+    {% endfor %}
+
 
     {% if object.email_object %}
         <div style="color: #062c33">this is email that replied or forwarded</div>
@@ -121,11 +126,6 @@
 
     <br>
 
-    <h style="color: #0f6674">filters</h>
-                                {% for filter in object.filter.values %}
-                                    <p style="color: darkolivegreen"><a
-                                            href="#">{{ filter.title }}</a></p>
-                                {% endfor %}
 
     <div>
         <a href="{% url 'forward-email' email.pk %}">

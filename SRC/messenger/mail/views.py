@@ -77,6 +77,10 @@ class CreateEmail(LoginRequiredMixin, View):
                               sender=sender
                               )
             email_obj.save()
+
+
+
+
             if 'draft' in request.POST:
                 EmailFolder(user=sender, email=email_obj, is_draft = True).save()
                 return redirect('/mail/draft')
@@ -87,10 +91,27 @@ class CreateEmail(LoginRequiredMixin, View):
                 EmailFolder(user=sender, email=email_obj).save()
 
                 for receiver in to_list:
+                    filters = Filter.objects.filter(owner=User.objects.get(username=receiver))
+                    for filter in filters:
+                        if str(filter.filter_by) in email_obj.subject or str(filter.filter_by) in email_obj.text or str(
+                                filter.filter_by) in email_obj.sender.username:
+                            email_obj.filter.add(filter)
                     EmailFolder(user=User.objects.get(username=receiver), email=email_obj).save()
+
                 for receiver in cc_list:
+                    filters = Filter.objects.filter(owner=User.objects.get(username=receiver))
+                    for filter in filters:
+                        if str(filter.filter_by) in email_obj.subject or str(filter.filter_by) in email_obj.text or str(
+                                filter.filter_by) in email_obj.sender.username:
+                            email_obj.filter.add(filter)
                     EmailFolder(user=User.objects.get(username=receiver), email=email_obj).save()
+
                 for receiver in bcc_list:
+                    filters = Filter.objects.filter(owner=User.objects.get(username=receiver))
+                    for filter in filters:
+                        if str(filter.filter_by) in email_obj.subject or str(filter.filter_by) in email_obj.text or str(
+                                filter.filter_by) in email_obj.sender.username:
+                            email_obj.filter.add(filter)
                     EmailFolder(user=User.objects.get(username=receiver), email=email_obj).save()
 
                 messages.add_message(request, messages.SUCCESS,
@@ -138,6 +159,9 @@ class EmailDetail(LoginRequiredMixin, DetailView):
         places = list(EmailFolder.objects.filter(email=context['object'].pk,
                                                  user_id=self.request.user.pk))
         context['places'] = places
+
+        if context['object'].filter:
+            context['filters']=list(context['object'].filter.filter(owner_id=self.request.user.pk))
         return context
 
 
@@ -310,7 +334,7 @@ class FilterEmail(LoginRequiredMixin, View):
                 query = Email.objects.filter(Q(sender=User.objects.get(username=search_input)) & (Q(receivers=request.user) |
                                                                                Q(cc=request.user) |
                                                                                Q(bcc=request.user)))
-                filter = Filter(title=request.POST['filter_name'], owner=request.user)
+                filter = Filter(title=request.POST['filter_name'], owner=request.user, filter_by=search_input)
                 filter.save()
                 for i in query:
                     i.filter.add(filter.id)
@@ -325,7 +349,7 @@ class FilterEmail(LoginRequiredMixin, View):
                                           Q(cc=request.user) |
                                           Q(bcc=request.user)))
 
-            filter = Filter(title=request.POST['filter_name'], owner=request.user)
+            filter = Filter(title=request.POST['filter_name'], owner=request.user, filter_by=search_input)
             filter.save()
             for i in query:
                 i.filter.add(filter.id)

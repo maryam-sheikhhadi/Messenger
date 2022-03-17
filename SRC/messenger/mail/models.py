@@ -30,6 +30,7 @@ class Signature(models.Model):
 class Filter(models.Model):
     title = models.CharField(max_length=50)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    filter_by = models.CharField(null=True, max_length=100)
 
 
 class Email(models.Model):
