@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Lable List{% endblock title %}
+
+{% block content %}
+    {% for label in labels %}
+        <div><a href="/mail/labels/{{ label.slug }}">{{ label }}</a></div>
+    {% endfor %}
+{% endblock %}

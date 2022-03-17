@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for email in query %}
+        <p><a href="{% url 'mail-detail' email.pk %}">email</a></p>
+    {% endfor %}
+</body>
+</html>

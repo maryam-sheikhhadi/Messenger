@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{#{% load static %}#}
+{% block title %}result search{% endblock title %}
+{% block content %}
+    {% for r in result %}
+        <li><a href="{% url 'contact-detail' r.pk %}">{{ r }}</a></li>
+    {% endfor %}
+{% endblock content %}

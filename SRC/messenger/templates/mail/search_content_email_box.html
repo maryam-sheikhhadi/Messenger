@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+    <input id="in_text" type="text" name="text" class="test-class">
+    <a href="{% url 'search_email' %}"></a>
+</form>
+
+<hr>
+
+<ul id="mu_ul">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+
+{% endblock content %}
+
+
+{% block script %}
+<script>
+    var CSRF_TOKEN = '{{ csrf_token }}';
+    var URL = "{% url 'search_email' %}"
+    var URL2 = "{% url 'all-mails' %}"
+
+</script>
+<script src={% static '/js/search_email.js' %}></script>
+{% endblock script %}
