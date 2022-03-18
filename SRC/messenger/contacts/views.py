@@ -74,9 +74,6 @@ class SearchByFieldContact(LoginRequiredMixin, View):
         fields_contacts_list = Contact.objects.all().filter(user=request.user.id).values_list('first_name', 'last_name',
                                                                                               'email', 'other_emails',
                                                                                               'phone_number')
-        # c = Contact.objects.all().filter(user=request.user.id).values_list('birth_date', flat=True)
-        # c2 = [i.strftime("%m/%d/%Y") for i in c if i]
-        # print(c2)
         r = list(itertools.chain(*fields_contacts_list))
         res = [i for i in r if i]
         print(res)

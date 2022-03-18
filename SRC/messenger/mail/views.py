@@ -78,9 +78,6 @@ class CreateEmail(LoginRequiredMixin, View):
                               )
             email_obj.save()
 
-
-
-
             if 'draft' in request.POST:
                 EmailFolder(user=sender, email=email_obj, is_draft = True).save()
                 return redirect('/mail/draft')
@@ -302,13 +299,13 @@ def search_content_email(req):
             json_data = json.loads(req.body)
             text = json_data['text']
 
-        email = Email.objects.filter(subject__contains=text)
-        email_list = email.values_list('text','subject')
-        email_lst = list(itertools.chain(*email_list))
-        emails = [i for i in email_lst if i]
+        email = Email.objects.filter(Q(subject__contains=text, subject__isnull=False) & (Q(sender=req.user) |
+                                     Q(receivers=req.user) | Q(cc=req.user) | Q(bcc=req.user)))
+        email_list = list(email.values('text','subject','pk'))
+
         if email:
             return JsonResponse({
-                'emails': emails
+                'emails': email_list,
             })
         else:
             return JsonResponse({
@@ -317,6 +314,7 @@ def search_content_email(req):
             })
     else:
         return render(req, 'mail/search_content_email_box.html', {})
+
 
 
 class FilterEmail(LoginRequiredMixin, View):
@@ -434,10 +432,7 @@ class SentBox(LoginRequiredMixin, View):
         emails = Email.objects.filter(sender=request.user.id).distinct()
         for e in emails:
             email_folder = EmailFolder.objects.filter(email=e.pk, user=request.user.pk)
-            print(f'_________{email_folder}')
-            print(e)
             for i in email_folder:
-                print(i)
                 if i.is_trash is True or i.is_draft is True:
                     emails=emails.exclude(pk=e.pk)
         return render(request, 'mail/sent_box.html', {'sent_box': emails})
@@ -451,8 +446,6 @@ class Inbox(LoginRequiredMixin, View):
 
         for e in emails_to:
             email_folder = EmailFolder.objects.filter(email=e.pk, user=request.user.pk)
-            print(f'_________{email_folder}')
-            print(e)
             for i in email_folder:
                 print(i)
                 if i.is_trash is True or i.is_draft is True or i.is_archive is True:
@@ -460,8 +453,6 @@ class Inbox(LoginRequiredMixin, View):
 
         for e in emails_cc:
             email_folder = EmailFolder.objects.filter(email=e.pk, user=request.user.pk)
-            print(f'_________{email_folder}')
-            print(e)
             for i in email_folder:
                 print(i)
                 if i.is_trash is True or i.is_draft is True or i.is_archive is True:
@@ -469,10 +460,7 @@ class Inbox(LoginRequiredMixin, View):
 
         for e in emails_bcc:
             email_folder = EmailFolder.objects.filter(email=e.pk, user=request.user.pk)
-            print(f'_________{email_folder}')
-            print(e)
             for i in email_folder:
-                print(i)
                 if i.is_trash is True or i.is_draft is True or i.is_archive is True:
                     emails_bcc=emails_bcc.exclude(pk=e.pk)
 
@@ -519,8 +507,6 @@ class Trash(LoginRequiredMixin, View):
                                       Q(cc=request.user.pk) | Q(receivers=request.user.pk))
         for e in emails:
             email_folder = EmailFolder.objects.filter(email=e.pk, user=request.user.pk)
-            print(f'_________{email_folder}')
-            print(e)
             for i in email_folder:
                 print(i)
                 if i.is_trash is False:
