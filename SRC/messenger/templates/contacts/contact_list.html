@@ -280,9 +280,12 @@
                 <div id="plist" class="people-list">
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                            <a href="{% url "search_contacts" %}"><span class="input-group-text"><i class="fa fa-search"></i></span>
+                            <span style="text-decoration: none">search contact</span>
+                            </a>
                         </div>
-                        <input type="text" class="form-control" placeholder="Search...">
+
+{#                        <input type="text" class="form-control" placeholder="Search...">#}
                     </div>
                     <ul class="list-unstyled chat-list mt-2 mb-0">
                         {% for contact in contacts_of_user %}

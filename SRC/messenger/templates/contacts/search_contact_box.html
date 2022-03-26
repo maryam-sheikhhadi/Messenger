@@ -1,5 +1,5 @@
 {% extends 'mail/layout/_base.html' %}
-{% block title %}Search Email content{% endblock %}
+{% block title %}Search Contact{% endblock %}
 {% load static %}
 {% block body %}
 
@@ -8,7 +8,7 @@
 <form method="POST">
     {% csrf_token %}
     <input style="margin-top: 30px" id="in_text" type="text" name="text" class="test-class">
-    <a href="{% url 'search_email' %}"></a>
+    <a href="{% url 'search_contacts' %}"></a>
 </form>
 
 <hr>
@@ -24,6 +24,6 @@
     var CSRF_TOKEN = '{{ csrf_token }}';
 
 </script>
-<script src={% static '/js/search_email.js' %}></script>
+<script src={% static '/js/search_contact.js' %}></script>
 {% endblock script %}
 {% endblock body %}

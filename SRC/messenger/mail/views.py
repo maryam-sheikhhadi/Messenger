@@ -1,4 +1,3 @@
-import itertools
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseRedirect
@@ -13,6 +12,25 @@ from django.http import JsonResponse
 import json
 from django.contrib import messages
 from django.utils import timezone
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import permissions
+from .serializer import EmailSerializer
+
+
+class Emails(APIView):  # Contacts List for any User
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        emails =         emails = Email.objects.all().filter(
+            Q(sender=request.user.id) | Q(receivers=request.user.id)
+            | Q(cc=request.user.id) | Q(bcc=request.user.id)).distinct()
+        # queryset
+        x = EmailSerializer(emails, many=True)  # serializer(queryset)
+        return Response({
+            'contacts': x.data
+        })
 
 """
     email views: create, forward, reply, delete, update, list and detail
@@ -299,8 +317,12 @@ def search_content_email(req):
             json_data = json.loads(req.body)
             text = json_data['text']
 
-        email = Email.objects.filter(Q(subject__contains=text, subject__isnull=False) & (Q(sender=req.user) |
-                                     Q(receivers=req.user) | Q(cc=req.user) | Q(bcc=req.user)))
+        email = Email.objects.filter((Q(subject__contains=text, subject__isnull=False) |
+                                      Q(text__contains=text, text__isnull=False))
+                                     & (Q(sender=req.user) |
+                                     Q(receivers=req.user) |
+                                        Q(cc=req.user) |
+                                        Q(bcc=req.user)))
         email_list = list(email.values('text','subject','pk'))
 
         if email:

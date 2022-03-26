@@ -1,15 +1,9 @@
-{% extends 'base.html' %}
-
-{% block title %}Create Label{% endblock title %}
-
-{% block content %}
-    <form action="" method="post">
-    {% csrf_token %}
-    <tabel>
-        <td>
-             {{ form.as_table }}
-            <input type="submit" value="make label">
-        </td>
-    </tabel>
+{% extends 'mail/layout/_base.html' %}
+{% block title %}Add Label{% endblock %}
+{% block body %}
+    <form method="post" style="margin-top: 20px">
+        {% csrf_token %}
+        <p>title : {{ form.title }}</p>
+        <input type="submit" value="create">
     </form>
-{% endblock %}
+{% endblock body %}
