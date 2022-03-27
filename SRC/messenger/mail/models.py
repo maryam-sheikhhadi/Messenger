@@ -6,7 +6,7 @@ from django.utils.text import slugify
 
 class Label(models.Model):
     title = models.CharField(max_length=100, null=False)
-    slug = models.SlugField(max_length=100, unique=True, null=True)
+    slug = models.SlugField(max_length=100, null=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
 
@@ -28,7 +28,8 @@ class Signature(models.Model):
         return self.text
 
 class Filter(models.Model):
-    title = models.CharField(max_length=50)
+    # title = models.CharField(max_length=50)
+    label = models.ForeignKey(Label, on_delete=models.CASCADE, null=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     filter_by = models.CharField(null=True, max_length=100)
 

@@ -7,10 +7,16 @@
 <body>
     <form method="post">
         {% csrf_token %}
-
+okay
         <input type="text" name="sender" placeholder="sender">
         <input type="text" name="word" placeholder="word">
-        <input type="text" name="filter_name" placeholder="filter name">
+
+                <select name="selected_label">
+            {% for q in labels %}
+            <option>{{ q }}</option>
+            {% endfor %}
+        </select>
+
         <input type="submit" value="filter">
 
     </form>
