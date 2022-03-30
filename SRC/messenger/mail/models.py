@@ -53,8 +53,11 @@ class Email(models.Model):
     slug = models.SlugField(max_length=100, unique=True, null=True, blank=True)
     filter = models.ManyToManyField(Filter, related_name='filters', blank=True)
 
-    def __str__(self):
-        return self.text
+    @property
+    def file_size(self):
+        if self.file and hasattr(self.file, 'size'):
+            return self.file.size
+
 
 
 class EmailFolder(models.Model):
@@ -63,6 +66,3 @@ class EmailFolder(models.Model):
     is_trash = models.BooleanField(default=False)
     is_archive = models.BooleanField(default=False)
     is_draft = models.BooleanField(default=False)
-
-    def __str__(self):
-        return f'{self.is_draft}_{self.email}_{self.user}'

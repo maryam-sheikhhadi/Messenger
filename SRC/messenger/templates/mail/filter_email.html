@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'mail/layout/_base.html' %}
+{% block title %}Filter Email{% endblock %}
+{% load static %}
+{% block body %}
+    <hr>
     <form method="post">
         {% csrf_token %}
-okay
         <input type="text" name="sender" placeholder="sender">
         <input type="text" name="word" placeholder="word">
 
@@ -20,5 +17,4 @@ okay
         <input type="submit" value="filter">
 
     </form>
-</body>
-</html>
+{% endblock %}

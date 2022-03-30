@@ -7,5 +7,10 @@
     {{ object.text }}<br>
     {{ object.user.username }}<br>
     {{ object.pk }}
+    <div>
+        <button class="btn_blue"><i class="fa fa-trash"></i><a
+                href="{% url 'delete-signature' object.pk %}">Delete
+            signature</a></button>
+    </div>
 
 {% endblock content %}

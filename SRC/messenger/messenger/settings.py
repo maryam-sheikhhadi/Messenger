@@ -38,11 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
     'accounts.apps.AccountsConfig',
     'widget_tweaks',
     'mail',
     'contacts',
-    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -152,7 +153,6 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-# EMAIL_HOST_USER = "this.is.from.messenger@gmail.com"
 EMAIL_HOST_USER = "maryam.sheikhhadi.01@gmail.com"
 EMAIL_HOST_PASSWORD = 'ucnckpuxemwdnqto'
 
@@ -161,3 +161,10 @@ AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_REDIRECT_URL = "accounts:home"  # url Page after login
 LOGIN_URL = "login"
+
+
+REST_FRAMEWORK = {
+   'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework.authentication.TokenAuthentication',
+   ),
+}

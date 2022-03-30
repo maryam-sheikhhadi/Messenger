@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from accounts.views import Register, ActivateAccount, logout_view
 from mail.views import EmailList
 from django.contrib.auth.views import LoginView
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
@@ -32,7 +33,7 @@ urlpatterns = [
                   path('signup/', Register.as_view(), name='register'),
                   path('activate/<uidb64>/<token>/', ActivateAccount.as_view(), name='activate'),
                   path('', include('django.contrib.auth.urls')),
-
+                  path('api-token-auth/', obtain_auth_token),
 
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

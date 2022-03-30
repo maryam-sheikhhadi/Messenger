@@ -9,7 +9,9 @@ from .forms import ContactModelForm
 from .models import Contact
 from django.http import HttpResponse
 import csv
-
+from django.http import JsonResponse
+import json
+from django.contrib.auth.decorators import login_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
@@ -98,13 +100,11 @@ class SearchByFieldContact(LoginRequiredMixin, View):
         contact = request.POST['search_field']
         result = Contact.objects.all().filter(Q(user=request.user) & (
                 Q(first_name__startswith=contact) | Q(last_name__startswith=contact) |
-                Q(email__startswith=contact) | Q(other_emails__startswith=contact) | Q(phone_number__startswith=contact)))
+                Q(email__startswith=contact) | Q(other_emails__startswith=contact) | Q(
+            phone_number__startswith=contact)))
         return render(request, 'contacts/result_search_contact.html', {'result': result})
 
-from django.db.models import Q
-from django.http import JsonResponse
-import json
-from django.contrib.auth.decorators import login_required
+
 @login_required
 def search_contacts(req):
     if req.method == 'POST':
@@ -120,11 +120,11 @@ def search_contacts(req):
                 Q(phone_number__contains=contact, phone_number__isnull=False)
         ))
         contact_list = list(result.values('first_name',
-                                        'last_name',
-                                        'email',
-                                        'other_emails',
-                                        'phone_number',
-                                        'pk'))
+                                          'last_name',
+                                          'email',
+                                          'other_emails',
+                                          'phone_number',
+                                          'pk'))
 
         if result:
             return JsonResponse({

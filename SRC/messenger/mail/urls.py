@@ -33,4 +33,5 @@ urlpatterns = [
     path('create-signature', CreateSignature.as_view(), name='create-signature'),
     path('signature-detail/<int:pk>', SignatureDetail.as_view(), name='signature-detail'),
     path('signatures', SignatureList.as_view(), name='signatures'),
+    path('delete-signature/<int:pk>', DeleteSignature.as_view(), name='delete-signature'),
 ]
