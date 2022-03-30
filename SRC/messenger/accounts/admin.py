@@ -38,7 +38,7 @@ class UserAdmin(admin.ModelAdmin):
 
     def get_user_storage(self, obj):
         # to show on list display
-        user_files = Email.objects.filterQ(sender=obj).exclude(Q(file='') | Q(file__isnull=True))
+        user_files = Email.objects.filter(sender=obj).exclude(Q(file='') | Q(file__isnull=True))
         total = sum(int(objects.file_size) for objects in user_files if objects.file_size)
         total = size_format(total)
         return total
