@@ -289,12 +289,7 @@
                                 {% for label in labels %}
                                     <li><a href="/mail/labels/{{ label.slug }}">{{ label.title }}</a></li>
                                 {% endfor %}
-                                <h5 style="color: #0f6674">filters</h5>
 
-                                <p>filters:</p>
-                                {% for filter in filters %}
-                                    <li><a href="#">{{ filter.title }}</a></li>
-                                {% endfor %}
                                 <hr style="color: #0c5460">
                                 {% if object.sign %}
                                     <div>signature:
