@@ -1,13 +1,9 @@
-{% extends 'base.html' %}
-
-{% block title %}Create Signature{% endblock title %}
-
-{% block content %}
-
-    <form action="" method="post">
+{% extends 'mail/layout/_base.html' %}
+{% block title %}Add Signature{% endblock %}
+{% block body %}
+    <form method="post" style="margin-top: 20px">
         {% csrf_token %}
-        {{ form.text }}
-        <input type="submit">
+        <p>title : {{ form.text }}</p>
+        <input type="submit" value="create">
     </form>
-
-{% endblock content %}
+{% endblock body %}

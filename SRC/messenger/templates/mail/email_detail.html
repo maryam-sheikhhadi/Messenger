@@ -1,148 +1,406 @@
-{% extends 'base.html' %}
+{% extends 'mail/layout/_base.html' %}
+{% block title %}email detail{% endblock %}
+{% block body %}
+    <section>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>Email Detail</title>
+            <style>
+                body {
+                    margin-top: 20px;
+                }
 
-{% block title %}Email Detail{% endblock title %}
+                .email-app {
+                    display: flex;
+                    flex-direction: row;
+                    background: #fff;
+                    border: 1px solid #e1e6ef;
+                }
 
-{% block content %}
+                .email-app nav {
+                    flex: 0 0 200px;
+                    padding: 1rem;
+                    border-right: 1px solid #e1e6ef;
+                }
+
+                .email-app nav .btn-block {
+                    margin-bottom: 15px;
+                }
+
+                .email-app nav .nav {
+                    flex-direction: column;
+                }
+
+                .email-app nav .nav .nav-item {
+                    position: relative;
+                }
+
+                .email-app nav .nav .nav-item .nav-link,
+                .email-app nav .nav .nav-item .navbar .dropdown-toggle,
+                .navbar .email-app nav .nav .nav-item .dropdown-toggle {
+                    color: #151b1e;
+                    border-bottom: 1px solid #e1e6ef;
+                }
+
+                .email-app nav .nav .nav-item .nav-link i,
+                .email-app nav .nav .nav-item .navbar .dropdown-toggle i,
+                .navbar .email-app nav .nav .nav-item .dropdown-toggle i {
+                    width: 20px;
+                    margin: 0 10px 0 0;
+                    font-size: 14px;
+                    text-align: center;
+                }
+
+                .email-app nav .nav .nav-item .nav-link .badge,
+                .email-app nav .nav .nav-item .navbar .dropdown-toggle .badge,
+                .navbar .email-app nav .nav .nav-item .dropdown-toggle .badge {
+                    float: right;
+                    margin-top: 4px;
+                    margin-left: 10px;
+                }
+
+                .email-app main {
+                    min-width: 0;
+                    flex: 1;
+                    padding: 1rem;
+                }
+
+                .email-app .inbox .toolbar {
+                    padding-bottom: 1rem;
+                    border-bottom: 1px solid #e1e6ef;
+                }
+
+                .email-app .inbox .messages {
+                    padding: 0;
+                    list-style: none;
+                }
+
+                .email-app .inbox .message {
+                    position: relative;
+                    padding: 1rem 1rem 1rem 2rem;
+                    cursor: pointer;
+                    border-bottom: 1px solid #e1e6ef;
+                }
+
+                .email-app .inbox .message:hover {
+                    background: #f9f9fa;
+                }
+
+                .email-app .inbox .message .actions {
+                    position: absolute;
+                    left: 0;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .email-app .inbox .message .actions .action {
+                    width: 2rem;
+                    margin-bottom: 0.5rem;
+                    color: #c0cadd;
+                    text-align: center;
+                }
+
+                .email-app .inbox .message a {
+                    color: #000;
+                }
+
+                .email-app .inbox .message a:hover {
+                    text-decoration: none;
+                }
+
+                .email-app .inbox .message.unread .header,
+                .email-app .inbox .message.unread .title {
+                    font-weight: bold;
+                }
+
+                .email-app .inbox .message .header {
+                    display: flex;
+                    flex-direction: row;
+                    margin-bottom: 0.5rem;
+                }
+
+                .email-app .inbox .message .header .date {
+                    margin-left: auto;
+                }
+
+                .email-app .inbox .message .title {
+                    margin-bottom: 0.5rem;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+
+                .email-app .inbox .message .description {
+                    font-size: 12px;
+                }
+
+                .email-app .message .toolbar {
+                    padding-bottom: 1rem;
+                    border-bottom: 1px solid #e1e6ef;
+                }
+
+                .email-app .message .details .title {
+                    padding: 1rem 0;
+                    font-weight: bold;
+                }
+
+                .email-app .message .details .header {
+                    display: flex;
+                    padding: 1rem 0;
+                    margin: 1rem 0;
+                    border-top: 1px solid #e1e6ef;
+                    border-bottom: 1px solid #e1e6ef;
+                }
+
+                .email-app .message .details .header .avatar {
+                    width: 40px;
+                    height: 40px;
+                    margin-right: 1rem;
+                }
+
+                .email-app .message .details .header .from {
+                    font-size: 12px;
+                    color: #9faecb;
+                    align-self: center;
+                }
+
+                .email-app .message .details .header .from span {
+                    display: block;
+                    font-weight: bold;
+                }
+
+                .email-app .message .details .header .date {
+                    margin-left: auto;
+                }
+
+                .email-app .message .details .attachments {
+                    padding: 1rem 0;
+                    margin-bottom: 1rem;
+                    border-top: 3px solid #f9f9fa;
+                    border-bottom: 3px solid #f9f9fa;
+                }
+
+                .email-app .message .details .attachments .attachment {
+                    display: flex;
+                    margin: 0.5rem 0;
+                    font-size: 12px;
+                    align-self: center;
+                }
+
+                .email-app .message .details .attachments .attachment .badge {
+                    margin: 0 0.5rem;
+                    line-height: inherit;
+                }
+
+                .email-app .message .details .attachments .attachment .menu {
+                    margin-left: auto;
+                }
+
+                .email-app .message .details .attachments .attachment .menu a {
+                    padding: 0 0.5rem;
+                    font-size: 14px;
+                    color: #e1e6ef;
+                }
+
+                @media (max-width: 767px) {
+                    .email-app {
+                        flex-direction: column;
+                    }
+
+                    .email-app nav {
+                        flex: 0 0 100%;
+                    }
+                }
+
+                @media (max-width: 575px) {
+                    .email-app .message .header {
+                        flex-flow: row wrap;
+                    }
+
+                    .email-app .message .header .date {
+                        flex: 0 0 100%;
+                    }
+                }
+            </style>
+        </head>
+
+        <body style="margin: 150px;">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+        <div style="width: 70% ;height:70%; ">
+            <div class="container">
+                <div class="email-app mb-4 mt-5">
+
+                    <main class="message">
+
+                        <div class="details">
+                            <div class="title"> Subject :
+                                {{ object.subject }}
+                            </div>
+                            <div class="header">
+                                <img class="avatar" src="https://bootdey.com/img/Content/avatar/avatar3.png"
+                                     alt="avatar">
+                                <div class="from">
+
+                                    <span>sender : {{ object.sender }}</span>
+                                    {{ object.sender.email }}
+                                </div>
+                                <div class="date"></b>{{ object.created }}</div>
+                            </div>
+                            <div class="content">
+                                <p> Text : <br>
+                                    {{ object.text }}
+                                </p>
 
 
-    <p>receiver as bcc receiver:</p>
-    {% for receiver in object.bcc.all %}
-        {% if user.get_username == receiver.username or user.get_username == object.sender.username %}
-            <p style="color: red">
-                {{ receiver.username }}
-            </p>
-        {% endif %}
-    {% endfor %}
+                                <hr style="color: #0c5460">
+                                <div>receiver to:
+                                    {% for receiver in object.receivers.all %}
+                                        <p style="color: green">
+                                            {{ receiver.username }}
+                                        </p>
+                                    {% endfor %}
+                                </div>
+
+                                <hr style="color: #0c5460">
+                                <div>receiver cc:
+                                    {% for receiver in object.cc.all %}
+                                        <p style="color: darksalmon">
+                                            {{ receiver.username }}
+                                        </p>
+                                    {% endfor %}
+                                </div>
+
+                                <hr style="color: #0c5460">
+                                <div>receiver bcc:
+                                    {% for receiver in object.bcc.all %}
+                                        <p style="color: mediumslateblue">
+                                            {% if user.get_username == receiver.username or user.get_username == object.sender.username %}
+                                                {{ receiver.username }}
+                                            {% endif %}
+                                        </p>
+                                    {% endfor %}
+                                </div>
+
+                                <hr style="color: #17a2b8">
+
+                                <p>labels:</p>
+                                {% for label in labels %}
+                                    <li><a href="/mail/labels/{{ label.slug }}">{{ label.title }}</a></li>
+                                {% endfor %}
+                                <h5 style="color: #0f6674">filters</h5>
+
+                                <p>filters:</p>
+                                {% for filter in filters %}
+                                    <li><a href="#">{{ filter.title }}</a></li>
+                                {% endfor %}
+                                <hr style="color: #0c5460">
+                                {% if object.sign %}
+                                    <div>signature:
+                                        <a href="{% url 'signature-detail' object.signature.pk %}">f{{ object.signature }}</a>
+                                    </div>
+                                {% endif %}
 
 
-    <p>receiver as to receiver:</p>
-    {% for receiver in object.receivers.all %}
-        <p style="color: green">
-            {{ receiver.username }}
-        </p>
-    {% endfor %}
+                                <hr style="color: #0c5460">
+
+                                <div>
+                                    {% for i in places %}
+                                        {% if i.is_draft %}
+                                            <button><a href="{% url 'send-from-draft' email.pk %}">send draft email</a>
+                                            </button>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+
+                                <hr style="color: #0c5460">
+                                <div style="margin-left: 200px">
+
+                                    <a href="/mail/reply-email/{{ object.pk }}">
+                                        <svg style="color: #17a2b8" xmlns="http://www.w3.org/2000/svg" width="20"
+                                             height="16"
+                                             fill="currentColor"
+                                             class="bi bi-reply-fill" viewBox="0 0 16 16">
+                                            <path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"/>
+                                        </svg>
+                                    </a>
+
+                                    <a href="/mail/forward-email/{{ object.pk }}">
+                                        <svg style="color: #17a2b8" xmlns="http://www.w3.org/2000/svg" width="20"
+                                             height="16"
+                                             fill="currentColor" class="bi bi-forward-fill" viewBox="0 0 16 16">
+                                            <path d="m9.77 12.11 4.012-2.953a.647.647 0 0 0 0-1.114L9.771 5.09a.644.644 0 0 0-.971.557V6.65H2v3.9h6.8v1.003c0 .505.545.808.97.557z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+
+                                <hr style="color: #0c5460">
+                                <div>
+                                    <p>Replayed messages</p>
+                                    {% if object.email_object %}
+                                        <a href="/mail/mail-detail/{{ object.email_object.pk }}">{{ object.email_object.text }}</a>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        </div>
+                        <hr style="color: #0c5460">
+                        <div>
+                            <button class="btn_blue"><i class="fa fa-trash"></i><a
+                                    href="{% url 'delete-email' object.pk %}">Delete
+                                email</a></button>
+                        </div>
+
+                        <div>
+                            <button class="btn_blue flw_pic">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-archive-fill" viewBox="0 0 16 16">
+                                    <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z"/>
+                                </svg>
+                                </i><a
+                                    href="{% url 'check-archive' email.pk %}">Archive
+                            </a></button>
+                        </div>
+
+                        <div>
+                            <button class="btn_blue flw_pic">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                                </svg>
+                                </i><a
+                                    href="{% url 'check-trash' email.pk %}">Trash
+                            </a></button>
+                        </div>
+
+                        <div>
+                            <button class="btn_blue flw_pic">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                     class="bi bi-bookmark-star-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                          d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zM8.16 4.1a.178.178 0 0 0-.32 0l-.634 1.285a.178.178 0 0 1-.134.098l-1.42.206a.178.178 0 0 0-.098.303L6.58 6.993c.042.041.061.1.051.158L6.39 8.565a.178.178 0 0 0 .258.187l1.27-.668a.178.178 0 0 1 .165 0l1.27.668a.178.178 0 0 0 .257-.187L9.368 7.15a.178.178 0 0 1 .05-.158l1.028-1.001a.178.178 0 0 0-.098-.303l-1.42-.206a.178.178 0 0 1-.134-.098L8.16 4.1z"/>
+                                </svg>
+                                <a
+                                        href="{% url 'add-label' email.pk %}">Add label
+                                </a></button>
+                        </div>
+
+                        <hr style="color: #0c5460">
+                        <p style="color: #0f6674">Files</p>
+                        {% if object.file %}
+                            <a href="/media/{{ object.file }}">{{ object.file }}</a>
+                        {% endif %}
 
 
-    <p>receiver as cc receiver:</p>
-    {% for receiver in object.cc.all %}
-        <p style="color: yellowgreen">
-            {{ receiver.username }}
-        </p>
-    {% endfor %}
+                    </main>
+
+                </div>
 
 
-    <div>sender: {{ object.sender }}</div>
-
-
-    <div>subject: {{ object.subject }}</div>
-
-    <div>text: {{ object.text }}</div>
-
-
-    <p style="color: #0f6674">Files</p>
-    {% if object.file %}
-        <a href="/media/{{ object.file }}">{{ object.file }}</a>
-    {% endif %}
-
-    signature:
-    {% if object.signature %}
-    <div><a href="{% url 'signature-detail' object.signature.pk %}">{{ object.signature }}</a> </div>
-{% endif %}
-
-
-    <p>labels:</p>
-    {% for label in labels %}
-        <li><a href="/mail/labels/{{ label.slug }}">{{ label.title }}</a></li>
-    {% endfor %}
-
-        <p>filters:</p>
-    {% for filter in filters %}
-        <li><a href="#">{{ filter.title }}</a></li>
-    {% endfor %}
-
-
-    {% if object.email_object %}
-        <div style="color: #062c33">this is email that replied or forwarded</div>
-        <div style="color: #6f94c6">text:{{ object.email_object.text }}</div>
-        <div style="color: #6f94c6">subject:{{ object.email_object.subject }}</div>
-        <div style="color: #6f94c6">sender:{{ object.email_object.sender }}</div>
-        <div style="color: #6f94c6">receivers:{{ object.email_object.receivers }}</div>
-        <div style="color: #6f94c6">bcc:{{ object.email_object.bcc}}</div>
-        <div style="color: #6f94c6">cc:{{ object.email_object.cc }}</div>
-        <div style="color: #6f94c6"><a href="/mail/mail-detail/{{ object.email_object.pk }}">link:{{ object.email_object.subject }}</a></div>
-    {% endif %}
-
-    <br>
-
-    <div>
-        <button style="background: red; color: white; padding: 5px;"><i class="fa fa-trash"></i>
-            <a href="{% url 'delete-email' email.pk %}" style="color: white">Delete</a>
-        </button>
-    </div>
-
-
-    <br>
-
-
-     <div>
-     <button style="background: red; color: white; padding: 5px;"><i class="fa fa-trash"></i>
-                <a href="{% url 'check-trash' email.pk %} " style="color: white">trash</a>
-     </button>
-    </div>
-
-
-        <br>
-
-
-     <div>
-        <button class="btn_blue flw_pic" style="background: royalblue; color: white; padding: 5px;">
-            <a href="{% url 'check-archive' email.pk %} " style="color: white">Archive</a>
-        </button>
-    </div>
-
-
-    <br>
-
-
-    <button class="btn_blue flw_pic">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-             class="bi bi-bookmark-star-fill" viewBox="0 0 16 16">
-            <path fill-rule="evenodd"
-                  d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zM8.16 4.1a.178.178 0 0 0-.32 0l-.634 1.285a.178.178 0 0 1-.134.098l-1.42.206a.178.178 0 0 0-.098.303L6.58 6.993c.042.041.061.1.051.158L6.39 8.565a.178.178 0 0 0 .258.187l1.27-.668a.178.178 0 0 1 .165 0l1.27.668a.178.178 0 0 0 .257-.187L9.368 7.15a.178.178 0 0 1 .05-.158l1.028-1.001a.178.178 0 0 0-.098-.303l-1.42-.206a.178.178 0 0 1-.134-.098L8.16 4.1z"/>
-        </svg>
-        <a
-                href="{% url 'add-label' email.pk %}">Add label
-        </a></button>
-
-    <br>
-
-    {% for i in places %}
-        {% if i.is_draft %}
-                    <button><a href="{% url 'send-from-draft' email.pk %}">send draft email</a></button>
-        {% endif %}
-    {% endfor %}
-
-
-
-    <br>
-
-
-    <div>
-        <a href="{% url 'forward-email' email.pk %}">
-            <svg style="margin: 2rem; color: goldenrod; width: 50px; height: 50px;" xmlns="http://www.w3.org/2000/svg"
-                 width="16" height="16" fill="currentColor" class="bi bi-forward-fill" viewBox="0 0 16 16">
-                <path d="m9.77 12.11 4.012-2.953a.647.647 0 0 0 0-1.114L9.771 5.09a.644.644 0 0 0-.971.557V6.65H2v3.9h6.8v1.003c0 .505.545.808.97.557z"/>
-            </svg>
-        </a>
-
-        <a href="{% url 'reply-email' email.pk %}">
-            <svg style="margin: 2rem; color: goldenrod; width: 50px; height: 50px;" xmlns="http://www.w3.org/2000/svg"
-                 width="16" height="16" fill="currentColor" class="bi bi-reply-fill" viewBox="0 0 16 16">
-                <path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"/>
-            </svg>
-        </a>
-    </div>
-
-    <div>
-
-{% endblock content %}
+            </div>
+        </div>
+        </body>
+        </html>
+    </section>
+{% endblock %}

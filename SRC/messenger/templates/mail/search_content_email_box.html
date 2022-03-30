@@ -1,10 +1,13 @@
-{% extends 'base.html' %}
+{% extends 'mail/layout/_base.html' %}
+{% block title %}Search Email content{% endblock %}
 {% load static %}
-{% block content %}
+{% block body %}
+
+
 
 <form method="POST">
     {% csrf_token %}
-    <input id="in_text" type="text" name="text" class="test-class">
+    <input style="margin-top: 30px" id="in_text" type="text" name="text" class="test-class">
     <a href="{% url 'search_email' %}"></a>
 </form>
 
@@ -16,16 +19,11 @@
     <li></li>
     <li></li>
 </ul>
-
-{% endblock content %}
-
-
 {% block script %}
 <script>
     var CSRF_TOKEN = '{{ csrf_token }}';
-    var URL = "{% url 'search_email' %}"
-    var URL2 = "{% url 'all-mails' %}"
 
 </script>
 <script src={% static '/js/search_email.js' %}></script>
 {% endblock script %}
+{% endblock body %}

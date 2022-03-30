@@ -1,12 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    {% for email in query %}
-        <p><a href="{% url 'mail-detail' email.pk %}">email</a></p>
-    {% endfor %}
-</body>
-</html>
+{% extends 'mail/layout/_base.html' %}
+{% block title %}result filter{% endblock %}
+{% block body %}
+    <section>
+        <div class="panel panel-default m-t-20">
+
+                    <div class="panel-body">
+                        {% for email in query %}
+                            <table class="table table-hover mails">
+                                <tbody>
+
+                                <tr>
+                                    <td class="mail-select">
+                                        <label class="cr-styled">
+                                            <input type="checkbox"><i class="fa"></i>
+                                        </label>
+                                    </td>
+                                    <td class="mail-rateing">
+                                        <i class="fa fa-star"></i>
+                                    </td>
+                                    <td>
+                                        <a href="/mail/mail-detail/{{ email.pk }}">{{ email.subject}}</a>
+                                    </td>
+                                    <td>
+                                        <a href="/mail/mail-detail/{{ email.pk }}"><i
+                                                class="fa fa-circle text-info m-r-15"></i>{{ email.text|truncatewords:5  }}
+                                        </a>
+                                    </td>
+                                    {% if email.is_starred %}
+                                        <td>
+                                            <i class="fa fa-paperclip"></i>
+                                        </td>
+                                    {% endif %}
+                                    <td class="text-right">
+                                        {{ email.created }}
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        {% endfor %}
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-xs-7">
+
+                            </div>
+
+                            <div class="col-xs-5">
+                                <div class="btn-group pull-right">
+                                    <button type="button" class="btn btn-default"><i class="fa fa-chevron-left"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-default"><i class="fa fa-chevron-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div> <!-- panel body -->
+
+                </div> <!-- panel -->
+
+            </div> <!-- end Col-9 -->
+        </div>
+    </section>
+{% endblock %}

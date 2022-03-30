@@ -1,0 +1,123 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('myChart').getContext('2d');
+
+
+            const labels = [];
+
+            const chartData = {{ file_data|safe }};
+
+
+            chartData.forEach((d) => {
+                labels.push(d.user)
+                d.x = d.user;
+                d.y = d.user_size;
+                console.log(d.x)
+            });
+            console.log(chartData);
+            // Render the chart
+            const chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Storage Used by user',
+                            data: chartData,
+                            backgroundColor: 'rgb(22,177,205)',
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                },
+                            },
+                        ],
+                    },
+                },
+            });
+
+
+            const ctx1 = document.getElementById('myChart1').getContext('2d');
+            const chartData1 = {{ chart_data | safe }};
+            chartData1.forEach((d) => {
+                d.x = new Date(d.date);
+            });
+
+            // Render the chart
+            const chart1 = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    datasets: [
+                        {
+                            label: 'new subscribers',
+                            data: chartData1,
+                            backgroundColor: 'rgba(53,107,2,0.5)',
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        xAxes: [
+                            {
+                                type: 'time',
+                                time: {
+                                    unit: 'day',
+                                    round: 'day',
+                                    displayFormats: {
+                                        day: 'MMM D',
+                                    },
+                                },
+                            },
+                        ],
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                },
+                            },
+                        ],
+                    },
+                },
+            });
+            const btn = document.querySelector('#reload');
+            btn.addEventListener('click', async () => {
+                const res = await fetch("/admin/accounts/User/chart_data/");
+                const json = await res.json();
+                json.forEach((d) => {
+                    d.x = new Date(d.date);
+                });
+                chart.data.datasets[0].data = json;
+                chart.update();
+            });
+
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <!-- Render our chart -->
+
+    <div style="width: 80%;">
+        <canvas style="margin-bottom: 30px; width: 60%; height: 50%;" id="myChart"></canvas>
+    </div>
+    <div style="width: 80%;">
+        <canvas style="margin-bottom: 60px; width: 60%; height: 50%;" id="myChart1"></canvas>
+    </div>
+
+    <!-- Render the rest of the ChangeList view -->
+    {{ block.super }}
+{% endblock %}

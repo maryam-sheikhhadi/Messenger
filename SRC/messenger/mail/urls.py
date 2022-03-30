@@ -15,6 +15,7 @@ urlpatterns = [
     path('filter-email/', FilterEmail.as_view(), name="filter-email"),
     path('check-archive/<int:pk>', check_archive, name="check-archive"),
     path('check-trash/<int:pk>', check_trash, name="check-trash"),
+    path('api/emails/', Emails.as_view(), name="emails"),
     #label urls: create, list, detail with slug, delete, search
     path('create-label', CreateLabel.as_view(), name="create-label"),
     path('labels', LabelList.as_view(), name="labels"),
@@ -32,4 +33,5 @@ urlpatterns = [
     path('create-signature', CreateSignature.as_view(), name='create-signature'),
     path('signature-detail/<int:pk>', SignatureDetail.as_view(), name='signature-detail'),
     path('signatures', SignatureList.as_view(), name='signatures'),
+    path('delete-signature/<int:pk>', DeleteSignature.as_view(), name='delete-signature'),
 ]

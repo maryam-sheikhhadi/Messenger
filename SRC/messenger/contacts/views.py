@@ -1,5 +1,4 @@
 import itertools
-
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render, redirect
@@ -10,6 +9,24 @@ from .forms import ContactModelForm
 from .models import Contact
 from django.http import HttpResponse
 import csv
+from django.http import JsonResponse
+import json
+from django.contrib.auth.decorators import login_required
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import permissions
+from .serializer import ContactSerializer
+
+
+class ContactsList(APIView):  # Contacts List for any User
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        contacts = Contact.objects.all().filter(user=request.user)  # queryset
+        x = ContactSerializer(contacts, many=True)  # serializer(queryset)
+        return Response({
+            'contacts': x.data
+        })
 
 
 class CreateContact(LoginRequiredMixin, View):
@@ -74,9 +91,6 @@ class SearchByFieldContact(LoginRequiredMixin, View):
         fields_contacts_list = Contact.objects.all().filter(user=request.user.id).values_list('first_name', 'last_name',
                                                                                               'email', 'other_emails',
                                                                                               'phone_number')
-        # c = Contact.objects.all().filter(user=request.user.id).values_list('birth_date', flat=True)
-        # c2 = [i.strftime("%m/%d/%Y") for i in c if i]
-        # print(c2)
         r = list(itertools.chain(*fields_contacts_list))
         res = [i for i in r if i]
         print(res)
@@ -86,5 +100,40 @@ class SearchByFieldContact(LoginRequiredMixin, View):
         contact = request.POST['search_field']
         result = Contact.objects.all().filter(Q(user=request.user) & (
                 Q(first_name__startswith=contact) | Q(last_name__startswith=contact) |
-                Q(email__startswith=contact) | Q(other_emails__startswith=contact) | Q(phone_number__startswith=contact)))
+                Q(email__startswith=contact) | Q(other_emails__startswith=contact) | Q(
+            phone_number__startswith=contact)))
         return render(request, 'contacts/result_search_contact.html', {'result': result})
+
+
+@login_required
+def search_contacts(req):
+    if req.method == 'POST':
+        contact = req.POST.get('text')
+        if not contact:
+            json_data = json.loads(req.body)
+            contact = json_data['text']
+
+        result = Contact.objects.all().filter(Q(user=req.user) & (
+                Q(first_name__contains=contact) | Q(last_name__contains=contact) |
+                Q(email__contains=contact) |
+                Q(other_emails__contains=contact, other_emails__isnull=False) |
+                Q(phone_number__contains=contact, phone_number__isnull=False)
+        ))
+        contact_list = list(result.values('first_name',
+                                          'last_name',
+                                          'email',
+                                          'other_emails',
+                                          'phone_number',
+                                          'pk'))
+
+        if result:
+            return JsonResponse({
+                'contacts': contact_list,
+            })
+        else:
+            return JsonResponse({
+                'contacts': [],
+                'msg': "doesn't match any contacts",
+            })
+    else:
+        return render(req, 'contacts/search_contact_box.html', {})

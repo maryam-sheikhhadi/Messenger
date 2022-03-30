@@ -1,0 +1,29 @@
+{% extends 'mail/layout/_base.html' %}
+{% block title %}Search Contact{% endblock %}
+{% load static %}
+{% block body %}
+
+
+
+<form method="POST">
+    {% csrf_token %}
+    <input style="margin-top: 30px" id="in_text" type="text" name="text" class="test-class">
+    <a href="{% url 'search_contacts' %}"></a>
+</form>
+
+<hr>
+
+<ul id="mu_ul">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+{% block script %}
+<script>
+    var CSRF_TOKEN = '{{ csrf_token }}';
+
+</script>
+<script src={% static '/js/search_contact.js' %}></script>
+{% endblock script %}
+{% endblock body %}
