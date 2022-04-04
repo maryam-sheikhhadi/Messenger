@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'mail',
     'contacts',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
@@ -156,6 +157,56 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "maryam.sheikhhadi.01@gmail.com"
 EMAIL_HOST_PASSWORD = 'ucnckpuxemwdnqto'
 
+# LOGGING_CONFIG = 'logging_config.LOGGING'
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'mail_file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': 'mail.log',
+        },
+        'contacts_file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': 'contacts.log',
+        },
+        'accounts_file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': 'accounts.log',
+        },
+    },
+    'loggers': {
+        'mail': {
+            'handlers': ['mail_file', 'console'],
+            'level': 'WARNING',
+            'propagate': False,
+            'exc_info': False
+        },
+        'contacts': {
+            'handlers': ['contacts_file'],
+            'level': 'WARNING',
+        },
+        'accounts': {
+            'handlers': ['accounts_file'],
+            'level': 'WARNING',
+        },
+    }
+}
+
+
 
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -167,4 +218,12 @@ REST_FRAMEWORK = {
    'DEFAULT_AUTHENTICATION_CLASSES': (
        'rest_framework.authentication.TokenAuthentication',
    ),
+}
+
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Advanced',
+    },
 }

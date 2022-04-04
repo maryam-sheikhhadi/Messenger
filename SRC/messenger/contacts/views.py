@@ -16,13 +16,18 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
 from .serializer import ContactSerializer
+import logging
+from django.contrib import messages
+
+
+logger = logging.getLogger('contacts')
 
 
 class ContactsList(APIView):  # Contacts List for any User
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        contacts = Contact.objects.all().filter(user=request.user)  # queryset
+        contacts = Contact.objects.filter(user=request.user)  # queryset
         x = ContactSerializer(contacts, many=True)  # serializer(queryset)
         return Response({
             'contacts': x.data
@@ -38,6 +43,13 @@ class CreateContact(LoginRequiredMixin, View):
     def post(self, request):
         form = ContactModelForm(request.POST)
         if form.is_valid():
+
+            usernames = User.objects.all().values_list('username', flat=True)
+            if form.cleaned_data['email'] not in usernames:
+                messages.add_message(request, messages.ERROR, f'this contact with username:{form.cleaned_data["email"]} not found')
+                logger.error("this contact with username:{form.cleaned_data['email']} not found so not saved")
+                return redirect('/')
+
             contact_obj = Contact(first_name=form.cleaned_data['first_name'],
                                   last_name=form.cleaned_data['last_name'],
                                   email=form.cleaned_data['email'],
@@ -47,7 +59,10 @@ class CreateContact(LoginRequiredMixin, View):
                                   user=User.objects.get(id=request.user.id)
                                   )
             contact_obj.save()
+
             return redirect("/contacts/all-contacts")
+        logger.error('contact form not valid')
+        return HttpResponse(f'errors:{form.errors}')
 
 
 class ContactList(LoginRequiredMixin, ListView):

@@ -4,64 +4,66 @@
     <section>
         <div class="panel panel-default m-t-20">
 
-                    <div class="panel-body">
-                        {% for email in query %}
-                            <table class="table table-hover mails">
-                                <tbody>
+            <div class="panel-body">
+                <table class="table table-hover mails">
+                    {% for email in query %}
 
-                                <tr>
-                                    <td class="mail-select">
-                                        <label class="cr-styled">
-                                            <input type="checkbox"><i class="fa"></i>
-                                        </label>
-                                    </td>
-                                    <td class="mail-rateing">
-                                        <i class="fa fa-star"></i>
-                                    </td>
-                                    <td>
-                                        <a href="/mail/mail-detail/{{ email.pk }}">{{ email.subject}}</a>
-                                    </td>
-                                    <td>
-                                        <a href="/mail/mail-detail/{{ email.pk }}"><i
-                                                class="fa fa-circle text-info m-r-15"></i>{{ email.text|truncatewords:5  }}
-                                        </a>
-                                    </td>
-                                    {% if email.is_starred %}
-                                        <td>
-                                            <i class="fa fa-paperclip"></i>
-                                        </td>
-                                    {% endif %}
-                                    <td class="text-right">
-                                        {{ email.created }}
-                                    </td>
-                                </tr>
+                        <tbody>
 
-                                </tbody>
-                            </table>
-                        {% endfor %}
-                        <hr>
+                        <tr>
+                            <td class="mail-select">
+                                <label class="cr-styled">
+                                    <input type="checkbox"><i class="fa"></i>
+                                </label>
+                            </td>
+                            <td class="mail-rateing">
+                                <i class="fa fa-star"></i>
+                            </td>
+                            <td>
+                                <a href="/mail/mail-detail/{{ email.pk }}">{{ email.subject }}</a>
+                            </td>
+                            <td>
+                                <a href="/mail/mail-detail/{{ email.pk }}"><i
+                                        class="fa fa-circle text-info m-r-15"></i>{{ email.text|truncatewords:4|safe }}
+                                </a>
+                            </td>
+                            {% if email.is_starred %}
+                                <td>
+                                    <i class="fa fa-paperclip"></i>
+                                </td>
+                            {% endif %}
+                            <td class="text-right">
+                                {{ email.created }}
+                            </td>
+                        </tr>
 
-                        <div class="row">
-                            <div class="col-xs-7">
+                        </tbody>
 
-                            </div>
+                    {% endfor %}
+                </table>
+                <hr>
 
-                            <div class="col-xs-5">
-                                <div class="btn-group pull-right">
-                                    <button type="button" class="btn btn-default"><i class="fa fa-chevron-left"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-default"><i class="fa fa-chevron-right"></i>
-                                    </button>
-                                </div>
-                            </div>
+                <div class="row">
+                    <div class="col-xs-7">
 
+                    </div>
+
+                    <div class="col-xs-5">
+                        <div class="btn-group pull-right">
+                            <button type="button" class="btn btn-default"><i class="fa fa-chevron-left"></i>
+                            </button>
+                            <button type="button" class="btn btn-default"><i class="fa fa-chevron-right"></i>
+                            </button>
                         </div>
+                    </div>
 
-                    </div> <!-- panel body -->
+                </div>
 
-                </div> <!-- panel -->
+            </div> <!-- panel body -->
 
-            </div> <!-- end Col-9 -->
+        </div> <!-- panel -->
+
+        </div> <!-- end Col-9 -->
         </div>
     </section>
 {% endblock %}

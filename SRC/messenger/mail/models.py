@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import User
 from .validators import validate_file_size
 from django.utils.text import slugify
+from ckeditor.fields import RichTextField
 
 
 class Label(models.Model):
@@ -40,7 +41,8 @@ class Email(models.Model):
     cc = models.ManyToManyField(User, related_name='receivers_cc', null=True, blank=True)
     bcc = models.ManyToManyField(User, related_name='receivers_bcc', null=True, blank=True)
     subject = models.CharField(max_length=100, null=True, blank=True)
-    text = models.TextField(max_length=1000, null=True, blank=True)
+    # text = models.TextField(max_length=1000, null=True, blank=True)
+    text = RichTextField(blank=True, null=True)
     label = models.ManyToManyField(Label, related_name='labels', null=True, blank=True)
     file = models.FileField(upload_to='media/docs', validators=[validate_file_size], null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)

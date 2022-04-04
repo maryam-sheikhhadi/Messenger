@@ -1,63 +1,296 @@
-{% block title %}
-    <center>REGISTER HERE😊</center>{% endblock title %}
-<hr style="color: #0f6674">
-{% block content %}
-    <form method="post">
-        {% csrf_token %}
-        <label for="recovery"></label><select name="recovery" id="recovery" class="txt">
-        <option value="email">Email</option>
-        <option value="phone">Phone</option>
-    </select>
-        <p>Email</p>
-        <label for="Email"></label><input type="email" class="txt" placeholder="Email" name="email" id="Email"
-                                          disabled="disabled">
-        <p>Phone</p>
-        <label for="Phone"></label><input type="text" class="txt" placeholder="Phone" name="phone" id="Phone"
-                                          disabled="disabled">
+{% load static %}
+{% load widget_tweaks %}
 
-        <p>username</p>
-        <label for="username"></label>
-        <p id="username">{{ form.username }}</p>
+<html lang="en">
+<head>
+    <title>Sign Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <p>Birthday</p>
-        <p id="birthday">{{ form.birth_date }}</p>
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
 
-        <p>Gender</p>
-        <p id="gender">{{ form.gender }}</p>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-        <p>Country</p>
-        <p id="country">{{ form.country }}</p>
+    <link rel="stylesheet" href="{% static 'registration/login/css/style.css' %}">
 
-        <p>password</p>
-        <p id="pasw1">{{ form.password1 }}</p>
+</head>
+<body>
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center mb-5">
+                <h2 class="heading-section"></h2>
+            </div>
+        </div>
+        {% if form.non_field_errors %}
+            <div style="color: #0c5460">
+                {{ form.non_field_errors.as_text }}
+            </div>
+        {% endif %}
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-10">
+                <div class="wrap d-md-flex">
+                    <div class="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last">
+                        <div class="text w-100">
+                            <h2>Welcome to Sign Page</h2>
 
-        <p>password confirm</p>
-        <p id="pasw2">{{ form.password2 }}</p>
+                            <a href="{% url 'login' %}" class="btn btn-white btn-outline-white">Sign In</a>
+                        </div>
+                    </div>
+                    <div class="login-wrap p-4 p-lg-5">
+                        <div class="d-flex">
+                            <div class="w-100">
+                                <h3 class="mb-4">Sign Up</h3>
+                            </div>
+                            <div class="w-100">
+                                <p class="social-media d-flex justify-content-end">
+                                    <a href="#"
+                                       class="social-icon d-flex align-items-center justify-content-center"><span
+                                            class="fa fa-facebook"></span></a>
+                                    <a href="#"
+                                       class="social-icon d-flex align-items-center justify-content-center"><span
+                                            class="fa fa-twitter"></span></a>
+                                </p>
+                            </div>
+                        </div>
+                        <form action="#" class="signin-form" method="post">{% csrf_token %}
 
 
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script type="text/javascript">
-            $(function () {
-                $("#recovery").change(function () {
-                    if ($(this).val() === 'email') {
-                        $("#Email").removeAttr("disabled");
-                        $("#Email").focus();
-                        $("#Email").attr("required", "required");
-                        $("#Phone").attr("disabled", "disabled");
-                    }
-                });
-            });
-            $(function () {
-                $("#recovery").change(function () {
-                    if ($(this).val() === 'phone') {
-                        $("#Phone").removeAttr("disabled");
-                        $("#Phone").focus();
-                        $("#Phone").attr("required", "required");
-                        $("#Email").attr("disabled", "disabled");
-                    }
-                });
-            });
-        </script>
-        <button type="submit">Register</button>
-    </form>
-{% endblock content %}
+
+
+
+                            <div class="form-group mb-3">
+                                <label class="label" for="name">Username</label>
+                                {{ form.username|add_class:"form-control" }}
+                                {% if form.username.errors %}
+                                    <div style="fcolor: #0c5460">
+                                        {% for error in form.username.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        <div >
+                            <div >
+                                <label for="recovery"></label><select name="recovery" id="recovery" class="txt">
+                                <option value="email">Email</option>
+                                <option value="phone">Phone</option>
+                            </div>
+                        </div>
+
+
+                            <div class="form-group mb-3">
+
+                                <label for="Email"></label><input type="email" class="txt form-control"
+                                                                  placeholder="Email" name="email" id="Email"
+                                                                  disabled="disabled">
+
+                            </div>
+
+                            <div class="form-group mb-3">
+
+                                <label for="Phone"></label><input type="text" class="txt form-control"
+                                                                  placeholder="Phone" name="phone" id="Phone"
+                                                                  disabled="disabled">
+
+                            </div>
+
+
+                            <div class="form-group mb-3">
+                                <label class="label" for="name">birth_date</label>
+                                {{ form.birth_date|add_class:"form-control" }}
+                                {% if form.birth_date.errors %}
+                                    <div style="fcolor: #0c5460">
+                                        {% for error in form.birth_date.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label class="label" for="name">Gender</label>
+                                {{ form.gender|add_class:"form-control" }}
+                                {% if form.gender.errors %}
+                                    <div style="fcolor: #0c5460">
+                                        {% for error in form.gender.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+
+                            <div class="form-group mb-3">
+                                <label class="label" for="name">Country</label>
+                                {{ form.country|add_class:"form-control" }}
+                                {% if form.country.errors %}
+                                    <div style="fcolor: #0c5460">
+                                        {% for error in form.country.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+
+                            <div class="form-group mb-3">
+                                <label class="label" for="password">Password</label>
+                                {{ form.password1|add_class:"form-control" }}
+                                {% if form.password1.errors %}
+                                    <div style="color: #0c5460">
+                                        {% for error in form.password1.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+
+                            <div class="form-group mb-3">
+                                <label class="label" for="password">Password confirm</label>
+                                {{ form.password2|add_class:"form-control" }}
+                                {% if form.password2.errors %}
+                                    <div style="color: #0c5460">
+                                        {% for error in form.password2.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="form-control btn btn-primary submit px-3">Sign Up
+                                </button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $("#recovery").change(function () {
+            if ($(this).val() === 'email') {
+                $("#Email").removeAttr("disabled");
+                $("#Email").focus();
+                $("#Email").attr("required", "required");
+                $("#Phone").attr("disabled", "disabled");
+            }
+        });
+    });
+    $(function () {
+        $("#recovery").change(function () {
+            if ($(this).val() === 'phone') {
+                $("#Phone").removeAttr("disabled");
+                $("#Phone").focus();
+                $("#Phone").attr("required", "required");
+                $("#Email").attr("disabled", "disabled");
+            }
+        });
+    });
+</script>
+<script src="{% static 'registration/login/js/jquery.min.js' %}"></script>
+<script src="{% static 'registration/login/js/popper.js' %}"></script>
+<script src="{% static 'registration/login/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'registration/login/js/main.js' %}"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#{% block title %}#}
+{#    <center>REGISTER HERE😊</center>{% endblock title %}#}
+{#<hr style="color: #0f6674">#}
+{#{% block content %}#}
+{#    <center>#}
+{#    <form method="post">#}
+{#        {% csrf_token %}#}
+{#        <label for="recovery"></label><select name="recovery" id="recovery" class="txt">#}
+{#        <option value="email">Email</option>#}
+{#        <option value="phone">Phone</option>#}
+{#    </select>#}
+{#        <p>Email</p>#}
+{#        <label for="Email"></label><input type="email" class="txt" placeholder="Email" name="email" id="Email"#}
+{#                                          disabled="disabled">#}
+{#        <p>Phone</p>#}
+{#        <label for="Phone"></label><input type="text" class="txt" placeholder="Phone" name="phone" id="Phone"#}
+{#                                          disabled="disabled">#}
+{##}
+{#        <p>username</p>#}
+{#        <label for="username"></label>#}
+{#        <p id="username">{{ form.username }}</p>#}
+{##}
+{#        <p>Birthday</p>#}
+{#        <p id="birthday">{{ form.birth_date }}</p>#}
+{##}
+{#        <p>Gender</p>#}
+{#        <p id="gender">{{ form.gender }}</p>#}
+{##}
+{#        <p>Country</p>#}
+{#        <p id="country">{{ form.country }}</p>#}
+{##}
+{#        <p>password</p>#}
+{#        <p id="pasw1">{{ form.password1 }}</p>#}
+{##}
+{#        <p>password confirm</p>#}
+{#        <p id="pasw2">{{ form.password2 }}</p>#}
+{##}
+{##}
+{#        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>#}
+{#        <script type="text/javascript">#}
+{#            $(function () {#}
+{#                $("#recovery").change(function () {#}
+{#                    if ($(this).val() === 'email') {#}
+{#                        $("#Email").removeAttr("disabled");#}
+{#                        $("#Email").focus();#}
+{#                        $("#Email").attr("required", "required");#}
+{#                        $("#Phone").attr("disabled", "disabled");#}
+{#                    }#}
+{#                });#}
+{#            });#}
+{#            $(function () {#}
+{#                $("#recovery").change(function () {#}
+{#                    if ($(this).val() === 'phone') {#}
+{#                        $("#Phone").removeAttr("disabled");#}
+{#                        $("#Phone").focus();#}
+{#                        $("#Phone").attr("required", "required");#}
+{#                        $("#Email").attr("disabled", "disabled");#}
+{#                    }#}
+{#                });#}
+{#            });#}
+{#        </script>#}
+{#        <button type="submit">Register</button>#}
+{#    </form>#}
+{#    </center>#}
+{#{% endblock content %}#}

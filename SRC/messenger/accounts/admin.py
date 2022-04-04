@@ -45,7 +45,8 @@ class UserAdmin(admin.ModelAdmin):
 
     def email_sent(self, obj):
         # to show on list display
-        emails = Email.objects.filter(sender=obj).count()
+        # emails = Email.objects.filter(sender=obj).count
+        emails = obj.sent_emails.count()
         return emails
 
     def email_received(self, obj):

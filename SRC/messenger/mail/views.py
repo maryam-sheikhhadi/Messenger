@@ -16,7 +16,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
 from .serializer import EmailSerializer
+import logging
 
+
+logger = logging.getLogger('mail')
 
 """
 api
@@ -27,13 +30,13 @@ class Emails(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        emails = Email.objects.all().filter(
+        emails = Email.objects.filter(
             Q(sender=request.user.id) | Q(receivers=request.user.id)
             | Q(cc=request.user.id) | Q(bcc=request.user.id)).distinct()
         # queryset
         x = EmailSerializer(emails, many=True)  # serializer(queryset)
         return Response({
-            'contacts': x.data
+            'emails': x.data
         })
 
 
@@ -76,12 +79,13 @@ class CreateEmail(LoginRequiredMixin, View):
             if i not in users_list:
                 messages.add_message(request, messages.ERROR,
                                      f"Sorry, there is no user with this {i} account. 🤔")
+                logger.error(f'Sorry, there is no user with this {i} account.')
                 return HttpResponseRedirect("/")
 
         for i in to_list:
             if i == '':
                 messages.add_message(request, messages.ERROR,
-                                     f"Sorry, receiver to can not be empty  🤷‍♂ 🧛‍♀️")
+                                     "Sorry, receiver to can not be empty  🤷‍♂ 🧛‍♀️")
                 return HttpResponseRedirect("/")
 
         to_list = [i for i in to_list if i in users_list]
@@ -186,6 +190,7 @@ class CreateEmail(LoginRequiredMixin, View):
                 return HttpResponseRedirect("/")
 
         messages.error(request, f'{form.errors}')
+        logger.error(f'Sorry, create email form is not valid')
         return redirect('/')
 
 
@@ -257,6 +262,9 @@ class ReplyEmail(LoginRequiredMixin, View):
             messages.add_message(request, messages.SUCCESS,
                                  f'email replied. 😊👌')
             return redirect('/')
+        logger.error(f'Sorry, reply email form is not valid')
+        messages.add_message(request, messages.ERROR,
+                             f'fail reply :/')
         return HttpResponse('ok nashod')
 
 
@@ -275,8 +283,24 @@ class ForwardEmail(LoginRequiredMixin, View):
         bcc_list = bcc.split(',')
         to_list = receivers.split(',')
 
+        all_receivers = cc_list + bcc_list + to_list
+        all_receivers = [i for i in all_receivers if i]
+
         users = User.objects.all().values_list('username', flat=True)
         users_list = [i for i in users]
+
+        for i in all_receivers:
+            if i not in users_list:
+                messages.add_message(request, messages.ERROR,
+                                     f"Sorry, there is no user with this {i} account. so forward failed")
+                logger.error(f'Sorry, there is no user with this {i} account. so forward failed')
+                return HttpResponseRedirect("/")
+
+        for i in to_list:
+            if i == '':
+                messages.add_message(request, messages.ERROR,
+                                     "Sorry, receiver to can not be empty. so forward failed  🤷‍♂ 🧛‍♀️")
+                return HttpResponseRedirect("/")
 
         to_list = [i for i in to_list if i in users_list]
         cc_list = [i for i in cc_list if i in users_list]
@@ -324,8 +348,24 @@ class SendDraft(LoginRequiredMixin, View):
         bcc_list = bcc.split(',')
         to_list = receivers.split(',')
 
+        all_receivers = cc_list + bcc_list + to_list
+        all_receivers = [i for i in all_receivers if i]
+
         users = User.objects.all().values_list('username', flat=True)
         users_list = [i for i in users]
+
+        for i in all_receivers:
+            if i not in users_list:
+                messages.add_message(request, messages.ERROR,
+                                     f"Sorry, there is no user with this {i} account. so send-draft failed")
+                logger.error(f'Sorry, there is no user with this {i} account. so send-draft failed')
+                return HttpResponseRedirect("/")
+
+        for i in to_list:
+            if i == '':
+                messages.add_message(request, messages.ERROR,
+                                     "Sorry, receiver to can not be empty so send-draft failed 🤷‍♂ 🧛‍♀️")
+                return HttpResponseRedirect("/")
 
         to_list = [i for i in to_list if i in users_list]
         cc_list = [i for i in cc_list if i in users_list]
@@ -508,6 +548,7 @@ class CreateLabel(LoginRequiredMixin, View):
                               owner=request.user)
             label_obj.save()
             return HttpResponse('this label created')
+
 
 
 class LabelList(LoginRequiredMixin, View):
