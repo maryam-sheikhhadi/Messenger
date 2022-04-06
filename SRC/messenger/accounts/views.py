@@ -47,7 +47,6 @@ class Register(View):
 
             messages.success(request, ('Please Confirm your email to complete registration.'))
 
-            # return render(request, 'registration/activate_messege_sent.html', {})
             return HttpResponse('An activation link was sent to your email. <a href="/login/">login</a>')
         else:
             logger.error('register form not valid')

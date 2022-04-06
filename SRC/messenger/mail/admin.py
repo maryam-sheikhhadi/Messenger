@@ -3,15 +3,34 @@ from .models import Label, Signature, Email, Filter, EmailFolder
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Count
-from django.db.models.functions import TruncDay, TruncMonth
+from django.db.models.functions import TruncMonth
 from django.http import JsonResponse
 from django.urls import path
+from accounts.models import User
+from django.http import HttpResponseRedirect
 
-# admin.site.register(Email)
-admin.site.register(Label)
 admin.site.register(Signature)
 admin.site.register(Filter)
 admin.site.register(EmailFolder)
+
+
+@admin.register(Label)
+class LabelAdmin(admin.ModelAdmin):
+    fields = ('title',)
+    list_display = ['owner', 'title']
+
+    def add_view(self, request):
+        if request.method == "POST":
+            try:
+                users = User.objects.all()
+                for user in users:
+                    Label.objects.create(owner_id=user.pk, title=request.POST.get('title'))
+                return HttpResponseRedirect("/admin/mail/label/")
+            except Exception as e:
+                # messages.add_message(request, messages.ERROR, message="this label exists")
+                return HttpResponseRedirect('/admin/mail/label/add/')
+
+        return super(LabelAdmin, self).add_view(request)
 
 
 @admin.register(Email)

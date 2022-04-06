@@ -221,6 +221,7 @@ REST_FRAMEWORK = {
 }
 
 
+#config ckeditor
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 CKEDITOR_CONFIGS = {
     'default': {

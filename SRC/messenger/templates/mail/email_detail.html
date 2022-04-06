@@ -239,9 +239,6 @@
                                 {{ object.subject }}
                             </div>
                             <div class="header">
-                                {#                                <img class="avatar" src="https://bootdey.com/img/Content/avatar/avatar3.png"#}
-                                {#                                     alt="avatar">#}
-                                {#                                <i class="bi bi-person-rolodex"></i>#}
 
                                 <svg style="color: lightgreen" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                      fill="currentColor"
@@ -301,7 +298,7 @@
                                 <hr style="color: #0c5460">
                                 {% if object.signature %}
                                     <div>signature:
-                                        <a href="{% url 'signature-detail' object.signature.pk %}">f{{ object.signature }}</a>
+                                        <a href="{% url 'signature-detail' object.signature.pk %}">{{ object.signature }}</a>
                                     </div>
                                 {% endif %}
 
@@ -318,11 +315,11 @@
                                 </div>
 
                                 <hr style="color: #0c5460">
-                                <div style="margin-left: 200px">
+                                <div style="margin-left: 11rem">
 
                                     <a href="/mail/reply-email/{{ object.pk }}">
-                                        <svg style="color: #17a2b8" xmlns="http://www.w3.org/2000/svg" width="20"
-                                             height="16"
+                                        <svg style="color: lightgreen" xmlns="http://www.w3.org/2000/svg" width="35"
+                                             height="35"
                                              fill="currentColor"
                                              class="bi bi-reply-fill" viewBox="0 0 16 16">
                                             <path d="M5.921 11.9 1.353 8.62a.719.719 0 0 1 0-1.238L5.921 4.1A.716.716 0 0 1 7 4.719V6c1.5 0 6 0 7 8-2.5-4.5-7-4-7-4v1.281c0 .56-.606.898-1.079.62z"/>
@@ -330,8 +327,8 @@
                                     </a>
 
                                     <a href="/mail/forward-email/{{ object.pk }}">
-                                        <svg style="color: #17a2b8" xmlns="http://www.w3.org/2000/svg" width="20"
-                                             height="16"
+                                        <svg style="color: lightgreen" xmlns="http://www.w3.org/2000/svg" width="35"
+                                             height="35"
                                              fill="currentColor" class="bi bi-forward-fill" viewBox="0 0 16 16">
                                             <path d="m9.77 12.11 4.012-2.953a.647.647 0 0 0 0-1.114L9.771 5.09a.644.644 0 0 0-.971.557V6.65H2v3.9h6.8v1.003c0 .505.545.808.97.557z"/>
                                         </svg>
@@ -340,7 +337,7 @@
 
                                 <hr style="color: #0c5460">
                                 <div>
-                                    <p>Replayed messages</p>
+                                    <p>Replied Email</p>
                                     {% if object.email_object %}
                                         <a href="/mail/mail-detail/{{ object.email_object.pk }}">{{ object.email_object.text|safe }}</a>
                                     {% endif %}
@@ -350,43 +347,41 @@
                         </div>
                         <hr style="color: #0c5460">
                         <div>
-                            <button class="btn_blue"><i class="fa fa-trash"></i><a
-                                    href="{% url 'delete-email' object.pk %}">Delete
-                                email</a></button>
+                            <i class="fa fa-trash" style="color: red"></i><a style="text-decoration: none; color: red"
+                                    href="{% url 'delete-email' object.pk %}"> Delete
+                                Email</a>
                         </div>
 
                         <div>
-                            <button class="btn_blue flw_pic">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                <svg style="color:green;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                      class="bi bi-archive-fill" viewBox="0 0 16 16">
                                     <path d="M12.643 15C13.979 15 15 13.845 15 12.5V5H1v7.5C1 13.845 2.021 15 3.357 15h9.286zM5.5 7h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1zM.8 1a.8.8 0 0 0-.8.8V3a.8.8 0 0 0 .8.8h14.4A.8.8 0 0 0 16 3V1.8a.8.8 0 0 0-.8-.8H.8z"/>
                                 </svg>
-                                </i><a
+                                </i><a style="text-decoration: none; color: green"
                                     href="{% url 'check-archive' email.pk %}">Archive
-                            </a></button>
+                            </a>
                         </div>
 
                         <div>
-                            <button class="btn_blue flw_pic">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                <svg style="color: orangered" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                      class="bi bi-trash3-fill" viewBox="0 0 16 16">
                                     <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
                                 </svg>
-                                </i><a
+                                </i><a style="text-decoration: none; color: orangered"
                                     href="{% url 'check-trash' email.pk %}">Trash
-                            </a></button>
+                            </a>
                         </div>
 
                         <div>
-                            <button class="btn_blue flw_pic">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+
+                                <svg style="color: #0f6674" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                      class="bi bi-bookmark-star-fill" viewBox="0 0 16 16">
                                     <path fill-rule="evenodd"
                                           d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5zM8.16 4.1a.178.178 0 0 0-.32 0l-.634 1.285a.178.178 0 0 1-.134.098l-1.42.206a.178.178 0 0 0-.098.303L6.58 6.993c.042.041.061.1.051.158L6.39 8.565a.178.178 0 0 0 .258.187l1.27-.668a.178.178 0 0 1 .165 0l1.27.668a.178.178 0 0 0 .257-.187L9.368 7.15a.178.178 0 0 1 .05-.158l1.028-1.001a.178.178 0 0 0-.098-.303l-1.42-.206a.178.178 0 0 1-.134-.098L8.16 4.1z"/>
                                 </svg>
-                                <a
-                                        href="{% url 'add-label' email.pk %}">Add label
-                                </a></button>
+                                <a style="text-decoration: none;color: #0f6674"
+                                        href="{% url 'add-label' email.pk %}">Add Label
+                                </a>
                         </div>
 
                         <hr style="color: #0c5460">

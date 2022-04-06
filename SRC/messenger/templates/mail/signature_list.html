@@ -1,11 +1,12 @@
-{% extends 'base.html' %}
-
-{% block title %}Signature List{% endblock title %}
-
-{% block content %}
-
+{% extends 'mail/layout/_base.html' %}
+{% block title %}Signature List{% endblock %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block body %}
+    <hr>
     {% for signature in signatures %}
-        <div><a href="/mail/signature-detail/{{ signature.pk }}">{{ signature.text }}</a></div>
+        <li><a href="/mail/signature-detail/{{ signature.pk }}" style="text-decoration: none">{{ signature.text }}</a></li>
+        <hr>
     {% endfor %}
-
 {% endblock %}

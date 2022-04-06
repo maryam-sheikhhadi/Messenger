@@ -75,28 +75,28 @@
     </style>
 </head>
 <body style="margin: 150px;">
-    {{ object.first_name }}
-    {{ object.last_name }}
-    {{ object.email }}
+{{ object.first_name }}
+{{ object.last_name }}
+{{ object.email }}
 
-    {% if object.profile_photo %}
-        {{ object.profile_photo }}
-    {% endif %}
+{% if object.profile_photo %}
+    {{ object.profile_photo }}
+{% endif %}
 
-    {% if object.phone_number %}
-        {{ object.phone_number }}
-    {% endif %}
+{% if object.phone_number %}
+    {{ object.phone_number }}
+{% endif %}
 
-    {% if object.other_email %}
-        {{ object.other_email }}
-    {% endif %}
+{% if object.other_email %}
+    {{ object.other_email }}
+{% endif %}
 <div class="container-xl px-4 mt-4">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Account page navigation-->
 
     <hr class="mt-0 mb-4">
     <div class="row">
-        <div  class="grid">
+        <div class="grid">
             <!-- Profile picture card-->
             <div class="g-col-6">
                 <div class="card-header">
@@ -106,8 +106,8 @@
                 </div>
                 <div class="card-body text-center">
                     <!-- Profile picture image-->
-{#                    <img class="img-account-profile rounded-circle mb-2"#}
-{#                         src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar">#}
+                    {#                    <img class="img-account-profile rounded-circle mb-2"#}
+                    {#                         src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="avatar">#}
 
                     <svg style="color: lightpink" xmlns="http://www.w3.org/2000/svg" width="100" height="100"
                          fill="currentColor"
@@ -124,21 +124,21 @@
         <div class="g-col-6">
             <!-- Account details card-->
             <div class="card mb-4">
-                <div class="card-header">Account Details</div>
+                <div class="card-header">Contact Details</div>
                 <div class="card-body">
-                    <form>
+                    <form style="margin-left: 0.7em; margin-top: 0.7em">
                         <!-- Form Group (username)-->
 
                         <!-- Form Row-->
                         <div class="row gx-3 mb-3">
                             <!-- Form Group (first name)-->
                             <div class="col-md-6">
-                                <label class="small mb-1" for="inputFirstName">First name</label>
+                                <label class="small mb-1" for="inputFirstName">First Name:</label>
                                 <h3 style="color: lightpink">{{ object.first_name }}</h3>
                             </div>
                             <!-- Form Group (last name)-->
                             <div class="col-md-6">
-                                <label class="small mb-1" for="inputLastName">Last name</label>
+                                <label class="small mb-1" for="inputLastName">Last Name:</label>
                                 <h3 style="color: lightpink">{{ object.last_name }}</h3>
                             </div>
                         </div>
@@ -146,7 +146,7 @@
 
                         <!-- Form Group (email address)-->
                         <div class="mb-3">
-                            <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                            <label class="small mb-1" for="inputEmailAddress">Email Address:</label>
                             <h3 style="color: lightpink">{{ object.email }}</h3>
                         </div>
                         <!-- Form Row-->
@@ -155,48 +155,50 @@
                             <div class="col-md-6">
 
                                 {% if object.phone_number %}
-                                    <label class="small mb-1" for="inputPhone">Phone number</label>
-                                    {{ object.phone_number }}
+                                    <label class="small mb-1" for="inputPhone">Phone Number:</label>
+                                    <h3 style="color: lightpink">{{ object.phone_number }}</h3>
                                 {% endif %}
                             </div>
                             <!-- Form Group (birthday)-->
                             <div class="col-md-6">
 
                                 {% if object.birth_date %}
-                                    <label class="small mb-1" for="inputBirthday">Birthday</label>
-                                    {{ object.birth_date }}
+                                    <label class="small mb-1" for="inputBirthday">Birthday:</label>
+                                    <h3 style="color: lightpink">{{ object.birth_date }}</h3>
                                 {% endif %}
                             </div>
-                        <div class="col-md-6">
+                            <div class="col-md-6">
 
                                 {% if object.other_emails %}
-                                    <label class="small mb-1" for="inputBirthday">other_email</label>
-                                    {{ object.other_emails }}
+                                    <label class="small mb-1" for="inputBirthday">Other Emails:</label>
+                                    <h3 style="color: lightpink">{{ object.other_emails }}</h3>
                                 {% endif %}
                             </div>
                         </div>
+                        <br>
+                        <div>
+                            <i class="fa fa-trash" style="color:orangered;"></i>
+                            <a href="{% url 'delete_contact' contact.pk %}"
+                               style="color:orangered;text-decoration: none">Delete</a>
 
-<div>
-<button style="background: red; color: white; padding: 5px;"><i class="fa fa-trash"></i>
-<a href="{% url 'delete_contact' contact.pk %}" style="color: white">Delete</a>
-</button>
-</div>
+                        </div>
 
-<br>
+                        <br>
 
-<div>
-<button class="btn_blue flw_pic" style="background: royalblue; color: white; padding: 5px;"><i
-class="fa fa-edit"></i><a href="{% url 'edite_contact' contact.pk %} " style="color: white">Edit
-</a></button>
-</div>
+                        <div>
+                            <i style="color: dodgerblue"
+                               class="fa fa-edit"></i><a href="{% url 'edite_contact' contact.pk %} "
+                                                         style="color: dodgerblue; text-decoration: none">Edit
+                        </a>
+                        </div>
 
-<br>
+                        <br>
                     </form>
-{#<form action="" method="post">#}
-{#    {% csrf_token %}#}
-{#    <input type="submit" value="delete">#}
-{##}
-{#</form>#}
+                    {#<form action="" method="post">#}
+                    {#    {% csrf_token %}#}
+                    {#    <input type="submit" value="delete">#}
+                    {##}
+                    {#</form>#}
                 </div>
             </div>
         </div>

@@ -67,7 +67,7 @@ class CreateContact(LoginRequiredMixin, View):
 
 class ContactList(LoginRequiredMixin, ListView):
     def get(self, request):
-        contacts_of_user = Contact.objects.all().filter(user=request.user.id)
+        contacts_of_user = Contact.objects.filter(user=request.user.id)
 
         return render(request, 'contacts/contact_list.html', {'contacts_of_user': contacts_of_user})
 
