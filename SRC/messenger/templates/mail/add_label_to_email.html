@@ -1,23 +1,22 @@
-{% extends 'base.html' %}
-{#{% load static %}#}
-{% block title %}Update Email{% endblock title %}
-{% block content %}
-<form method="post">{% csrf_token %}
-    <div class="container flw_pic">
-            <label><b>Label</b></label>
-{#        <br>#}
-{#            {{ form.as_p}}#}
-{#        <br>#}
-        {{ query }}
-        <select name="selected_label" multiple>
-            {% for q in query %}
-            <option>{{ q }}</option>
-            {% endfor %}
-        </select>
+{% extends 'mail/layout/_base.html' %}
+{% block title %}Search Label{% endblock %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block body %}
+    <hr>
 
-            <button type="submit" class="btn_blue">Add label</button>
-
-
+    <form method="post">{% csrf_token %}
+        <div class="container flw_pic">
+            <label><b>Labels:</b></label>
+            <br>
+            <select name="selected_label" multiple>
+                {% for q in query %}
+                    <option>{{ q }}</option>
+                {% endfor %}
+            </select>
+            <br>
+            <button type="submit" class="btn_blue">Add</button>
         </div>
-</form>
-{% endblock content %}
+    </form>
+{% endblock %}

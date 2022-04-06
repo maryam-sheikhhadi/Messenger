@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import User
 from .validators import validate_file_size
 from django.utils.text import slugify
+from ckeditor.fields import RichTextField
 
 
 class Label(models.Model):
@@ -12,7 +13,7 @@ class Label(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
+            self.slug = slugify(self.title + self.owner.username)
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -40,16 +41,13 @@ class Email(models.Model):
     cc = models.ManyToManyField(User, related_name='receivers_cc', null=True, blank=True)
     bcc = models.ManyToManyField(User, related_name='receivers_bcc', null=True, blank=True)
     subject = models.CharField(max_length=100, null=True, blank=True)
-    text = models.TextField(max_length=1000, null=True, blank=True)
+    text = RichTextField(blank=True, null=True)
     label = models.ManyToManyField(Label, related_name='labels', null=True, blank=True)
     file = models.FileField(upload_to='media/docs', validators=[validate_file_size], null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     signature = models.ForeignKey(Signature, on_delete=models.SET_NULL, null=True, blank=True)
     email_object = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
-    is_archive = models.BooleanField(default=False)
-    is_draft = models.BooleanField(default=False)
-    is_trash = models.BooleanField(default=False)
     slug = models.SlugField(max_length=100, unique=True, null=True, blank=True)
     filter = models.ManyToManyField(Filter, related_name='filters', blank=True)
 

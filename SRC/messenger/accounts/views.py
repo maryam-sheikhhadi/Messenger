@@ -13,6 +13,10 @@ from django.views.generic import View
 from .forms import SignupForm
 from .models import User
 from .tokens import account_activation_token
+import logging
+from django.http import HttpResponse
+
+logger = logging.getLogger('accounts')
 
 
 # view for register user
@@ -43,9 +47,10 @@ class Register(View):
 
             messages.success(request, ('Please Confirm your email to complete registration.'))
 
-            return render(request, 'registration/activate_messege_sent.html', {})
-
-        return render(request, self.template_name, {'form': form})
+            return HttpResponse('An activation link was sent to your email. <a href="/login/">login</a>')
+        else:
+            logger.error('register form not valid')
+            return render(request, self.template_name, {'form': form})
 
 
 # view for activate user account
@@ -65,6 +70,7 @@ class ActivateAccount(View):
             messages.success(request, ('Your account have been confirmed.'))
             return render(request, 'registration/activate_successfully.html', {})
         else:
+            logger.error(f'expire activate link for {user}')
             return render(request, 'registration/expire_activate_link.html', {})
 
 
@@ -75,6 +81,7 @@ class Login(LoginView):
         if user.is_active:
             return reverse_lazy("accounts:home")
         else:
+            logger.warning(f'{user} try to login but he is not active')
             return reverse_lazy("accounts:profile")
 
 
@@ -83,7 +90,8 @@ def profile(request):
 
 
 def home(request):
-    return render(request, "registration/profile.html", {})
+    return redirect('/')
+
 
 def logout_view(request):
     if request.method == 'POST':

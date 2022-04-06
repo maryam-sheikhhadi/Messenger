@@ -16,7 +16,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions
 from .serializer import EmailSerializer
+import logging
 
+logger = logging.getLogger('mail')
 
 """
 api
@@ -27,13 +29,13 @@ class Emails(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        emails = Email.objects.all().filter(
+        emails = Email.objects.filter(
             Q(sender=request.user.id) | Q(receivers=request.user.id)
             | Q(cc=request.user.id) | Q(bcc=request.user.id)).distinct()
         # queryset
         x = EmailSerializer(emails, many=True)  # serializer(queryset)
         return Response({
-            'contacts': x.data
+            'emails': x.data
         })
 
 
@@ -76,12 +78,13 @@ class CreateEmail(LoginRequiredMixin, View):
             if i not in users_list:
                 messages.add_message(request, messages.ERROR,
                                      f"Sorry, there is no user with this {i} account. 🤔")
+                logger.error(f'Sorry, there is no user with this {i} account.')
                 return HttpResponseRedirect("/")
 
         for i in to_list:
             if i == '':
                 messages.add_message(request, messages.ERROR,
-                                     f"Sorry, receiver to can not be empty  🤷‍♂ 🧛‍♀️")
+                                     "Sorry, receiver to can not be empty  🤷‍♂ 🧛‍♀️")
                 return HttpResponseRedirect("/")
 
         to_list = [i for i in to_list if i in users_list]
@@ -186,6 +189,7 @@ class CreateEmail(LoginRequiredMixin, View):
                 return HttpResponseRedirect("/")
 
         messages.error(request, f'{form.errors}')
+        logger.error(f'Sorry, create email form is not valid')
         return redirect('/')
 
 
@@ -257,6 +261,9 @@ class ReplyEmail(LoginRequiredMixin, View):
             messages.add_message(request, messages.SUCCESS,
                                  f'email replied. 😊👌')
             return redirect('/')
+        logger.error(f'Sorry, reply email form is not valid')
+        messages.add_message(request, messages.ERROR,
+                             f'fail reply :/')
         return HttpResponse('ok nashod')
 
 
@@ -275,8 +282,24 @@ class ForwardEmail(LoginRequiredMixin, View):
         bcc_list = bcc.split(',')
         to_list = receivers.split(',')
 
+        all_receivers = cc_list + bcc_list + to_list
+        all_receivers = [i for i in all_receivers if i]
+
         users = User.objects.all().values_list('username', flat=True)
         users_list = [i for i in users]
+
+        for i in all_receivers:
+            if i not in users_list:
+                messages.add_message(request, messages.ERROR,
+                                     f"Sorry, there is no user with this {i} account. so forward failed")
+                logger.error(f'Sorry, there is no user with this {i} account. so forward failed')
+                return HttpResponseRedirect("/")
+
+        for i in to_list:
+            if i == '':
+                messages.add_message(request, messages.ERROR,
+                                     "Sorry, receiver to can not be empty. so forward failed  🤷‍♂ 🧛‍♀️")
+                return HttpResponseRedirect("/")
 
         to_list = [i for i in to_list if i in users_list]
         cc_list = [i for i in cc_list if i in users_list]
@@ -324,8 +347,24 @@ class SendDraft(LoginRequiredMixin, View):
         bcc_list = bcc.split(',')
         to_list = receivers.split(',')
 
+        all_receivers = cc_list + bcc_list + to_list
+        all_receivers = [i for i in all_receivers if i]
+
         users = User.objects.all().values_list('username', flat=True)
         users_list = [i for i in users]
+
+        for i in all_receivers:
+            if i not in users_list:
+                messages.add_message(request, messages.ERROR,
+                                     f"Sorry, there is no user with this {i} account. so send-draft failed")
+                logger.error(f'Sorry, there is no user with this {i} account. so send-draft failed')
+                return HttpResponseRedirect("/")
+
+        for i in to_list:
+            if i == '':
+                messages.add_message(request, messages.ERROR,
+                                     "Sorry, receiver to can not be empty so send-draft failed 🤷‍♂ 🧛‍♀️")
+                return HttpResponseRedirect("/")
 
         to_list = [i for i in to_list if i in users_list]
         cc_list = [i for i in cc_list if i in users_list]
@@ -373,6 +412,7 @@ def search_content_email(req):
                                         Q(receivers=req.user) |
                                         Q(cc=req.user) |
                                         Q(bcc=req.user)))
+
         email_list = list(email.values('text', 'subject', 'pk', 'sender'))
 
         if email:
@@ -452,9 +492,6 @@ class FilterEmail(LoginRequiredMixin, View):
             # return query
             label = request.POST['selected_label']
             selected_label = Label.objects.filter(title=label)[0]
-            print(f'_______all__________{Label.objects.filter(title=label)}')
-            print(f'_______11111____{Label.objects.filter(title=label)[1]}')
-            print(f'__________0000_________{selected_label}')
 
             filter = Filter(label=selected_label, owner=request.user, filter_by=search_input)
             filter.save()
@@ -487,12 +524,11 @@ class AddLabel(View):
         return render(request, 'mail/add_label_to_email.html', {'query': list(query)})
 
     def post(self, request, pk):
-        print(request.POST)
         label = request.POST.getlist('selected_label')
         email = Email.objects.get(id=pk)
-        label_id = [Label.objects.get(title=i) for i in label]
+        label_id = [Label.objects.get(title=i, owner=request.user).id for i in label]
         email.label.add(*label_id)
-        return HttpResponse('okay!')
+        return redirect(f'/mail/mail-detail/{pk}')
 
 
 class CreateLabel(LoginRequiredMixin, View):
@@ -507,7 +543,7 @@ class CreateLabel(LoginRequiredMixin, View):
             label_obj = Label(title=form.cleaned_data['title'],
                               owner=request.user)
             label_obj.save()
-            return HttpResponse('this label created')
+            return redirect('/mail/labels')
 
 
 class LabelList(LoginRequiredMixin, View):
@@ -567,14 +603,12 @@ class Inbox(LoginRequiredMixin, View):
         for e in emails_to:
             email_folder = EmailFolder.objects.filter(email=e.pk, user=request.user.pk)
             for i in email_folder:
-                print(i)
                 if i.is_trash is True or i.is_draft is True or i.is_archive is True:
                     emails_to = emails_to.exclude(pk=e.pk)
 
         for e in emails_cc:
             email_folder = EmailFolder.objects.filter(email=e.pk, user=request.user.pk)
             for i in email_folder:
-                print(i)
                 if i.is_trash is True or i.is_draft is True or i.is_archive is True:
                     emails_cc = emails_cc.exclude(pk=e.pk)
 
@@ -593,13 +627,11 @@ class Draft(LoginRequiredMixin, View):
 
     def get(self, request):
         emails = Email.objects.filter(sender=request.user.pk, cc=None, bcc=None, receivers=None)
-        print(f'before{emails}')
         for e in emails:
             email_folder = EmailFolder.objects.filter(email=e.pk, user=request.user.pk)
             for i in email_folder:
                 if i.is_draft is False or i.is_archive is True or i.is_trash is True:
                     emails = emails.exclude(pk=e.pk)
-            print(f'after{emails}')
         return render(request, 'mail/draft.html', {'draft': emails})
 
 
@@ -610,10 +642,7 @@ class Archive(LoginRequiredMixin, View):
                                       Q(cc=request.user.pk) | Q(receivers=request.user.pk))
         for e in emails:
             email_folder = EmailFolder.objects.filter(email=e.pk, user=request.user.pk)
-            print(f'_________{email_folder}')
-            print(e)
             for i in email_folder:
-                print(i)
                 if i.is_archive is False or i.is_trash is True:
                     emails = emails.exclude(pk=e.pk)
 
@@ -628,7 +657,6 @@ class Trash(LoginRequiredMixin, View):
         for e in emails:
             email_folder = EmailFolder.objects.filter(email=e.pk, user=request.user.pk)
             for i in email_folder:
-                print(i)
                 if i.is_trash is False:
                     emails = emails.exclude(pk=e.pk)
 

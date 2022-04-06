@@ -1,13 +1,13 @@
-{% extends 'base.html' %}
-
-{% block title %}Create Contact{% endblock title %}
-
-{% block content %}
-
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="create contact" name="create-contact">
-</form>
-
+{% extends 'mail/layout/_base.html' %}
+{% block title %}Filter Email{% endblock %}
+{% load static %}
+{% block body %}
+    <hr>
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <input type="submit" value="create contact" name="create-contact">
+    </form>
 {% endblock %}

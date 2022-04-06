@@ -1,9 +1,8 @@
 from django.urls import path
 from .views import *
 
-
 urlpatterns = [
-    #email urls: create, list, detail, reply, forward, delete, edite, search with ajax
+    # email urls: create, list, detail, reply, forward, delete, edite, search with ajax
     path('create-email', CreateEmail.as_view(), name="create-email"),
     path('all-mails', EmailList.as_view(), name="all-mails"),
     path('mail-detail/<int:pk>', EmailDetail.as_view(), name="mail-detail"),
@@ -16,20 +15,20 @@ urlpatterns = [
     path('check-archive/<int:pk>', check_archive, name="check-archive"),
     path('check-trash/<int:pk>', check_trash, name="check-trash"),
     path('api/emails/', Emails.as_view(), name="emails"),
-    #label urls: create, list, detail with slug, delete, search
+    # label urls: create, list, detail with slug, delete, search
     path('create-label', CreateLabel.as_view(), name="create-label"),
     path('labels', LabelList.as_view(), name="labels"),
     path('labels/<slug:slug>', LabelDetail.as_view(), name="label-detail"),
     path('delete-label/<slug:slug>', DeleteLabel.as_view(), name='delete-label'),
     path('search-label', SearchByLable.as_view(), name='search-label'),
     path('add-label/<int:pk>', AddLabel.as_view(), name='add-label'),
-    #categories: sent, inbox, draft, archive, trash
+    # categories: sent, inbox, draft, archive, trash
     path('sent_box', SentBox.as_view(), name='sent_box'),
     path('inbox', Inbox.as_view(), name='inbox'),
     path('draft', Draft.as_view(), name='draft'),
     path('archive', Archive.as_view(), name='archive'),
     path('trash', Trash.as_view(), name='trash'),
-    #signature
+    # signature
     path('create-signature', CreateSignature.as_view(), name='create-signature'),
     path('signature-detail/<int:pk>', SignatureDetail.as_view(), name='signature-detail'),
     path('signatures', SignatureList.as_view(), name='signatures'),

@@ -1,9 +1,14 @@
-{% extends 'base.html' %}
-
-{% block title %}Lable List{% endblock title %}
-
-{% block content %}
+{% extends 'mail/layout/_base.html' %}
+{% block title %}Label List{% endblock %}
+{% load static %}
+{% block css %}
+{% endblock %}
+{% block body %}
+    <hr>
     {% for label in labels %}
-        <div><a href="/mail/labels/{{ label.slug }}">{{ label }}</a></div>
+        <li>
+        <a href="/mail/labels/{{ label.slug }}" style="text-decoration: none;">{{ label }}</a>
+        </li>
+        <hr>
     {% endfor %}
 {% endblock %}
