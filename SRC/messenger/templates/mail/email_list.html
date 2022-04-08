@@ -16,10 +16,10 @@
                             <i class="fa fa-star"></i>
                         </td>
                         <td>
-                            <a href="/mail/mail-detail/{{ email.pk }}"> {{ email.subject|truncatechars:5 }}</a>
+                            <a href="/mail/mail-detail/{{ email.pk }} "style="text-decoration: none;"> {{ email.subject|truncatechars:5 }}</a>
                         </td>
                         <td>
-                            <a href="/mail/mail-detail/{{ email.pk }}">{{ email.text|safe }}</a>
+                            <a href="/mail/mail-detail/{{ email.pk }}" style="text-decoration: none;">{{ email.text|safe }}</a>
                         </td>
                         <td>
                             <i class="fa fa-paperclip"></i>

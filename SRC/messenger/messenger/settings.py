@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-n&u7g1cl_puhb-7y*2xb((vbh39%hkk-3m!*8swz#6nh5@j+(1'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -85,9 +88,9 @@ WSGI_APPLICATION = 'messenger.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'messenger',
-        'USER': 'postgres',
-        'PASSWORD': '123456',
+        'NAME': env('DATABASE_NAME'),
+        'USER': env('DATABASE_USER'),
+        'PASSWORD': env('DATABASE_PASS'),
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -154,8 +157,8 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "maryam.sheikhhadi.01@gmail.com"
-EMAIL_HOST_PASSWORD = 'ucnckpuxemwdnqto'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
 # LOGGING_CONFIG = 'logging_config.LOGGING'
 LOGGING = {
@@ -176,16 +179,19 @@ LOGGING = {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
             'filename': 'mail.log',
+            'formatter': 'simple'
         },
         'contacts_file': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
             'filename': 'contacts.log',
+            'formatter': 'simple'
         },
         'accounts_file': {
             'level': 'WARNING',
             'class': 'logging.FileHandler',
             'filename': 'accounts.log',
+            'formatter': 'simple'
         },
     },
     'loggers': {

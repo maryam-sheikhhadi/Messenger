@@ -24,7 +24,7 @@
                             </td>
                             <td>
                                 <a href="/mail/mail-detail/{{ email.pk }}"><i
-                                        class="fa fa-circle text-info m-r-15"></i>{{ email.text|truncatewords:5 }}
+                                        class="fa fa-circle text-info m-r-15"></i>{{ email.text|truncatewords:5|safe }}
                                 </a>
                             </td>
                             <td class="text-right">
