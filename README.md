@@ -1,7 +1,7 @@
 This is Web Messenger
 
 Features:
-Register and login
+Register and login\n
 Authorization with email
 Send and draft email
 Reply and forward
