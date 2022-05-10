@@ -1,6 +1,6 @@
 This is Web Messenger
 
-Features:
+Features:\
 Register and login\n
 Authorization with email
 Send and draft email
